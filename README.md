@@ -1,6 +1,9 @@
 # The Ore Programming Language
 
-Ore is a modern, developer-friendly programming language combining the best features from multiple programming paradigms. It's designed to be expressive, powerful, and easy to learn.
+Ore is a modern, developer-friendly programming language combining the best features from multiple programming paradigms. It's designed to be expressive, powerful, and easy to learn. Ore is a compiled language built using LLVM and C++.
+
+**Version:** 1.0.0  
+**Author:** Dhruv Rawat
 
 ```ore
 // A simple example of the Ore programming language
@@ -54,14 +57,13 @@ fn main(argc, args) {
 - [Destructuring](#destructuring)
 - [Spread Syntax](#spread-syntax)
 - [Async/Await](#asyncawait)
-- [Structs and Classes](#structs-and-classes)
+- [Structs](#structs)
 - [Operator Overloading](#operator-overloading)
 - [Enums and Unions](#enums-and-unions)
 - [Error Handling](#error-handling)
 - [Modules](#modules)
 - [Type Inspection](#type-inspection)
 - [File I/O](#file-io)
-- [Concurrency](#concurrency)
 - [Built-in Functions](#built-in-functions)
 - [Examples](#examples)
 
@@ -751,13 +753,6 @@ struct User {
         this.email = email
     }
     
-    // Alternative init method (also works)
-    init(name: string, age: int, email: string? = null) {
-        this.name = name
-        this.age = age
-        this.email = email
-    }
-    
     // Methods
     fn isAdult(): bool {
         return age >= 18
@@ -773,7 +768,7 @@ struct User {
 
 ```ore
 // Object creation
-let user1 = User("Alice", 30)                 // Using default constructor
+let user1 = User("Alice", 30)                 // Using struct name directly like C++
 let user2 = constructor User("Bob", 25)       // Explicit constructor call
 let user3 = User(name: "Charlie", age: 35)    // Named parameters in constructor
 ```
@@ -1109,176 +1104,6 @@ let normalized = Path.normalize("path/../other/./file.txt") // "other/file.txt"
 let absolutePath = Path.absolute("relative/path")
 ```
 
-## Concurrency
-
-### Futures and Promises
-
-```ore
-// Creating and working with futures
-let future = Future.create()
-future.resolve(42)                  // Resolve with a value
-future.reject(new Error("Failed"))  // Reject with an error
-
-// Consuming futures
-future.then(
-    value => print("Value: ${value}"),
-    error => print("Error: ${error}")
-)
-
-// Chaining futures
-future
-    .then(value => value * 2)
-    .then(value => print("Doubled: ${value}"))
-    .catch(error => print("Error: ${error}"))
-```
-
-### Async/Await
-
-```ore
-// Using async/await with futures
-async fn getData(url: string): string {
-    try {
-        let response = await http.get(url)
-        return response.body
-    } catch (err) {
-        print("Error fetching data: ${err}")
-        return ""
-    }
-}
-
-// Calling async function
-async fn main() {
-    let data = await getData("https://api.example.com/data")
-    print(data)
-}
-```
-
-### Parallel Execution
-
-```ore
-// Running tasks in parallel
-async fn fetchMultipleApis() {
-    // Wait for all futures to complete
-    let [users, products, orders] = await Future.all([
-        getData("https://api.example.com/users"),
-        getData("https://api.example.com/products"),
-        getData("https://api.example.com/orders")
-    ])
-    
-    // Process the results
-    processData(users, products, orders)
-}
-
-// Race - get first result only
-async fn fetchWithFallback() {
-    let result = await Future.race([
-        getData("https://api.example.com/primary"),
-        getData("https://api.example.com/fallback")
-    ])
-    
-    return result
-}
-```
-
-### Worker Threads
-
-```ore
-// Spawning a worker thread
-let worker = Worker.spawn("worker_script.ore")
-
-// Send message to worker
-worker.postMessage({
-    command: "process",
-    data: largeDataset
-})
-
-// Receive message from worker
-worker.onMessage(message => {
-    if (message.type == "result") {
-        displayResult(message.data)
-    } else if (message.type == "progress") {
-        updateProgressBar(message.percent)
-    }
-})
-
-// Handle errors
-worker.onError(error => {
-    print("Worker error: ${error}")
-})
-
-// Terminate worker when done
-worker.terminate()
-```
-
-### Channels and CSP
-
-```ore
-// Creating a channel
-let channel = Channel.create(10)  // Buffered channel with capacity 10
-
-// Sending values (blocks if channel is full)
-channel.send("Hello")
-
-// Receiving values (blocks if channel is empty)
-let message = channel.receive()
-
-// Non-blocking operations
-let sendSuccess = channel.trySend("data")  // Returns false if full
-let receiveResult = channel.tryReceive()   // Returns null if empty
-
-// Closing a channel
-channel.close()
-
-// Select statement (inspired by Go)
-select {
-    case value = channel1.receive():
-        print("Received from channel1: ${value}")
-    case channel2.send(data):
-        print("Sent to channel2")
-    case timeout(1000):
-        print("Operation timed out")
-    default:
-        print("No channel ready")
-}
-```
-
-### Synchronization Primitives
-
-```ore
-// Mutex for critical sections
-let mutex = Mutex.create()
-
-// Explicit locking/unlocking
-mutex.lock()
-try {
-    // Critical section
-    sharedResource.update()
-} finally {
-    mutex.unlock()  // Always unlock, even if exception occurs
-}
-
-// Helper function for automatic locking/unlocking
-withLock(mutex, () => {
-    // Critical section
-    sharedResource.update()
-})
-
-// Read-write lock (multiple readers, exclusive writer)
-let rwLock = RWLock.create()
-
-// Multiple readers can read simultaneously
-withReadLock(rwLock, () => {
-    // Read shared resource
-    let value = sharedResource.getValue()
-})
-
-// Only one writer at a time
-withWriteLock(rwLock, () => {
-    // Modify shared resource
-    sharedResource.setValue(newValue)
-})
-```
-
 ## Built-in Functions
 
 ### General Functions
@@ -1512,225 +1337,6 @@ fn processLogFile(path: string) {
 
 fn main() {
     processLogFile("application.log")
-}
-```
-
-### Data Visualization Example
-
-```ore
-fn analyzeTemperatureData(filepath: string) {
-    // 1. Load CSV data
-    let lines = File.readLines(filepath)
-    let temperatures = []
-    let dates = []
-    
-    // Skip header line
-    for (i in 1..<lines.length) {
-        let parts = lines[i].split(",")
-        dates.push(parts[0])
-        temperatures.push(float(parts[1]))
-    }
-    
-    // 2. Calculate statistics
-    let min = temperatures.min()
-    let max = temperatures.max()
-    let avg = temperatures.average()
-    
-    // 3. Display results as text
-    print(Terminal.bold("Temperature Analysis:"))
-    print("Data points: ${temperatures.length}")
-    print("Min: ${min}°C")
-    print("Max: ${max}°C")
-    print("Average: ${avg.toFixed(1)}°C")
-    
-    // 4. Create visualization
-    print(Terminal.bold("\nTemperature Chart:"))
-    Chart.line(
-        dates,
-        temperatures,
-        {
-            title: "Daily Temperatures",
-            xLabel: "Date",
-            yLabel: "Temperature (°C)"
-        }
-    )
-    
-    // 5. Display distribution as bar chart
-    let distribution = {
-        "< 0°C": temperatures.count(t => t < 0),
-        "0-10°C": temperatures.count(t => t >= 0 && t < 10),
-        "10-20°C": temperatures.count(t => t >= 10 && t < 20),
-        "20-30°C": temperatures.count(t => t >= 20 && t < 30),
-        "> 30°C": temperatures.count(t => t >= 30)
-    }
-    
-    print(Terminal.bold("\nTemperature Distribution:"))
-    Chart.bar(
-        Object.keys(distribution),
-        Object.values(distribution),
-        { title: "Temperature Ranges" }
-    )
-}
-
-fn main() {
-    analyzeTemperatureData("temperature_data.csv")
-}
-```
-
-### Concurrency Example
-
-```ore
-fn main(argc, args) {
-    // URL list to fetch data from
-    let urls = [
-        "https://api.example.com/users",
-        "https://api.example.com/products",
-        "https://api.example.com/orders",
-        "https://api.example.com/analytics"
-    ]
-    
-    // Progress tracking
-    let completed = 0
-    let mutex = Mutex.create()
-    let progressBar = Terminal.progressBar(urls.length)
-    
-    // Create a channel for results
-    let resultsChannel = Channel.create()
-    
-    // Process each URL in a separate worker thread
-    for (url in urls) {
-        // Launch a worker for each URL
-        let worker = Worker.spawn("fetch_worker.ore")
-        
-        // Send the URL to the worker
-        worker.postMessage({ url: url })
-        
-        // Handle the response
-        worker.onMessage(result => {
-            // Send result to the channel
-            resultsChannel.send({
-                url: url,
-                data: result.data,
-                time: result.time
-            })
-            
-            // Update progress
-            withLock(mutex, () => {
-                completed++
-                progressBar.update(completed)
-            })
-        })
-        
-        // Handle errors
-        worker.onError(error => {
-            print("Error fetching ${url}: ${error}")
-            
-            // Still need to update the progress
-            withLock(mutex, () => {
-                completed++
-                progressBar.update(completed)
-            })
-            
-            // Send error result to channel
-            resultsChannel.send({
-                url: url,
-                error: error,
-                time: 0
-            })
-        })
-    }
-    
-    // Collect results asynchronously
-    async fn collectResults() {
-        let results = []
-        
-        // Collect all results from the channel
-        for (i in 0..<urls.length) {
-            let result = await resultsChannel.receive()
-            results.push(result)
-        }
-        
-        // Sort by response time
-        results.sort((a, b) => a.time - b.time)
-        
-        // Display results
-        println("\nResults:")
-        Table.print(results.map(r => {
-            return {
-                "URL": r.url,
-                "Status": r.error ? "Error" : "Success",
-                "Time (ms)": r.time,
-                "Data Size": r.error ? 0 : r.data.length
-            }
-        }))
-    }
-    
-    // Start collecting results
-    collectResults()
-}
-```
-
-### HTTP Request
-
-```ore
-async fn main(argc, args) {
-    try {
-        let url = "https://api.example.com/data"
-        print("Fetching data from ${url}...")
-        
-        let data = await fetchData(url)
-        let parsed = json.parse(data)
-        
-        print("Received ${parsed.items.length} items")
-        
-        for (item, i in parsed.items) {
-            print("${i+1}. ${item.name}")
-        }
-    } catch (err) {
-        print("Error: ${err}")
-    }
-}
-
-async fn fetchData(url: string): string {
-    let resp = await http.get(url)
-    if (resp.status != 200) {
-        throw "HTTP Error: ${resp.status}"
-    }
-    return resp.body
-}
-```
-
-### Command Line Tool
-
-```ore
-fn main(argc, args) {
-    // argc contains the number of command line arguments
-    // args is a list of all arguments, with args[0] being the program name
-    
-    if (argc < 2) {
-        print("Usage: ${args[0]} <filename>")
-        exit(1)
-    }
-    
-    let filename = args[1]
-    
-    try {
-        let content = fs.readFile(filename)
-        let lines = content.split("\n")
-        
-        print("File ${filename} has ${lines.length} lines")
-        
-        let wordCount = 0
-        for (line in lines) {
-            let words = line.split(/\s+/).filter(w => w.length > 0)
-            wordCount += words.length
-        }
-        
-        print("Word count: ${wordCount}")
-    } catch (err) {
-        print("Error: ${err}")
-        exit(1)
-    }
 }
 ```
 
@@ -2006,3 +1612,207 @@ let set_keys = {
     immutable_set: "value1",
     frozenset({4, 5, 6}): "value2"
 } 
+```
+
+## Async/Await
+
+### Async Functions
+
+```ore
+// Define an async function
+async fn fetchData(url: string): string {
+    // Simulate HTTP request
+    await sleep(100)  // Wait for 100ms
+    return "Data from ${url}"
+}
+
+// Use async/await in another function
+async fn processData() {
+    print("Fetching data...")
+    let data = await fetchData("https://api.example.com")
+    print("Received: ${data}")
+    return data
+}
+```
+
+### Error Handling with Async/Await
+
+```ore
+async fn fetchWithErrorHandling(url: string): string {
+    try {
+        let response = await fetch(url)
+        
+        if (!response.ok) {
+            throw "HTTP Error: ${response.status}"
+        }
+        
+        return await response.text()
+    } catch (err) {
+        print("Error fetching data: ${err}")
+        return ""
+    }
+}
+```
+
+### Parallel Execution
+
+```ore
+async fn fetchMultiple() {
+    // Execute multiple async operations in parallel
+    let data1 = fetchData("https://api.example.com/endpoint1")
+    let data2 = fetchData("https://api.example.com/endpoint2")
+    
+    // Wait for both to complete
+    let result1 = await data1
+    let result2 = await data2
+    
+    print("Data 1: ${result1}")
+    print("Data 2: ${result2}")
+}
+```
+
+## Examples
+
+### Basic Program
+
+```ore
+fn main(argc, args) {
+    print("Hello, Ore!")
+    
+    for (i in 1..5) {
+        print("${i} squared is ${i*i}")
+    }
+}
+```
+
+### Fibonacci Sequence
+
+```ore
+@memoize
+fn fibonacci(n: int): int {
+    if (n <= 1) return n
+    return fibonacci(n-1) + fibonacci(n-2)
+}
+
+fn main(argc, args) {
+    print("First 10 Fibonacci numbers:")
+    for (i in 0..<10) {
+        print("fibonacci(${i}) = ${fibonacci(i)}")
+    }
+}
+```
+
+### File Processing Example
+
+```ore
+fn processLogFile(path: string) {
+    // Check if file exists
+    if (!File.exists(path)) {
+        print("Error: File not found")
+        return
+    }
+    
+    // Read the log file
+    let lines = File.readLines(path)
+    
+    // Process and filter the lines
+    let errorCount = 0
+    let errorLines = []
+    
+    for (line, i in lines) {
+        if (line.contains("ERROR")) {
+            errorCount++
+            errorLines.push("Line ${i+1}: ${line}")
+        }
+    }
+    
+    // Generate report file
+    with (let reportFile = File.open("error_report.txt", "w")) {
+        reportFile.write("Error Report for ${path}\n")
+        reportFile.write("Total errors found: ${errorCount}\n\n")
+        
+        for (errorLine in errorLines) {
+            reportFile.write("${errorLine}\n")
+        }
+    }
+    
+    print("Report generated: error_report.txt")
+    print("Total errors found: ${errorCount}")
+}
+
+fn main(argc, args) {
+    processLogFile("application.log")
+}
+```
+
+### Command Line Tool
+
+```ore
+fn main(argc, args) {
+    // argc contains the number of command line arguments
+    // args is a list of all arguments, with args[0] being the program name
+    
+    if (argc < 2) {
+        print("Usage: ${args[0]} <filename>")
+        exit(1)
+    }
+    
+    let filename = args[1]
+    
+    try {
+        let content = fs.readFile(filename)
+        let lines = content.split("\n")
+        
+        print("File ${filename} has ${lines.length} lines")
+        
+        let wordCount = 0
+        for (line in lines) {
+            let words = line.split(/\s+/).filter(w => w.length > 0)
+            wordCount += words.length
+        }
+        
+        print("Word count: ${wordCount}")
+    } catch (err) {
+        print("Error: ${err}")
+        exit(1)
+    }
+}
+```
+
+### Async HTTP Request
+
+```ore
+async fn main(argc, args) {
+    try {
+        let url = "https://api.example.com/data"
+        print("Fetching data from ${url}...")
+        
+        let data = await fetchData(url)
+        let parsed = json.parse(data)
+        
+        print("Received ${parsed.items.length} items")
+        
+        for (item, i in parsed.items) {
+            print("${i+1}. ${item.name}")
+        }
+    } catch (err) {
+        print("Error: ${err}")
+    }
+}
+
+async fn fetchData(url: string): string {
+    let resp = await http.get(url)
+    if (resp.status != 200) {
+        throw "HTTP Error: ${resp.status}"
+    }
+    return resp.body
+}
+```
+
+## Collections: Lists
+
+// ... existing code ...
+
+---
+
+Created by Dhruv Rawat
