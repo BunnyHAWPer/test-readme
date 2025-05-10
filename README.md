@@ -5,6 +5,18 @@ Ore is a modern, developer-friendly programming language combining the best feat
 **Version:** 1.0.0  
 **Author:** Dhruv Rawat
 
+## Key Features
+
+- **Compiled Performance**: Ore is compiled to native code using LLVM for high performance
+- **Static Typing with Type Inference**: Strong static typing with intuitive type inference
+- **Multi-paradigm**: Supports procedural, functional, and object-oriented programming styles
+- **Memory Safety**: Automatic memory management without garbage collection overhead
+- **Modern Syntax**: Clean, expressive syntax inspired by Python, JavaScript, Rust, and Swift
+- **First-class Functions**: Functions as values, closures, and higher-order functions
+- **Pattern Matching**: Powerful pattern matching capabilities
+- **Comprehensive Standard Library**: Rich standard library covering common programming needs
+- **Interoperability**: Seamless interoperability with C/C++ code
+
 ```ore
 // A simple example of the Ore programming language
 import math
@@ -38,6 +50,7 @@ fn main(argc, args) {
 
 ## Table of Contents
 
+- [Key Features](#key-features)
 - [Basic Syntax](#basic-syntax)
 - [Imports](#imports)
 - [Variables and Constants](#variables-and-constants)
@@ -49,6 +62,9 @@ fn main(argc, args) {
 - [Collections: Tuples](#collections-tuples)
 - [Collections: Dictionaries](#collections-dictionaries)
 - [Collections: Sets](#collections-sets)
+- [Collections: Frozen Sets (Immutable)](#collections-frozen-sets-immutable)
+- [Collection Types Comparison](#collection-types-comparison)
+- [Collection Examples](#collection-examples)
 - [Operators](#operators)
 - [Control Flow: Conditions](#control-flow-conditions)
 - [Control Flow: Loops](#control-flow-loops)
@@ -61,7 +77,7 @@ fn main(argc, args) {
 - [Operator Overloading](#operator-overloading)
 - [Enums and Unions](#enums-and-unions)
 - [Error Handling](#error-handling)
-- [Modules](#modules)
+- [Importing Modules](#importing-modules)
 - [Type Inspection](#type-inspection)
 - [File I/O](#file-io)
 - [Built-in Functions](#built-in-functions)
@@ -912,28 +928,7 @@ fn compute(): Result<int, string> {
 }
 ```
 
-## Modules
-
-### Module Declaration
-
-```ore
-module math_utils {
-    fn square(x: int): int {
-        return x * x
-    }
-    
-    fn cube(x: int): int {
-        return x * x * x
-    }
-    
-    // Private to module
-    private fn helper() {
-        // Implementation
-    }
-}
-```
-
-### Importing Modules
+## Importing Modules
 
 ```ore
 // Import and use
@@ -946,6 +941,9 @@ from math_utils import square, cube
 // Import with alias
 import math_utils as mu
 let cubed = mu.cube(3)
+
+// Import all (use with caution)
+from math_utils import *
 ```
 
 ## Type Inspection
@@ -1110,78 +1108,63 @@ let absolutePath = Path.absolute("relative/path")
 
 ```ore
 // Output and input
-print("Hello")                      // Print to stdout
-println("Hello with newline")       // Print with newline
-let value = input("Enter value: ")  // Get user input with prompt
+print(value)                                // Print to stdout (no newline)
+println(value)                              // Print with newline
+let input_value = input("Enter value: ")    // Get user input with prompt
 
-// Type inspection
-let type_name = typeof(42)          // Returns "int" as string
-let type_obj = type(42)             // Returns the actual type object
-let collection_size = len(list)     // Length of collection
+// Type inspection and conversion
+let type_name = typeof(42)                  // Returns "int" as string
+let type_obj = type(42)                     // Returns the actual type object
+let collection_size = len(list)             // Length of collection
+let is_instance = isinstance(value, type)   // Check if value is instance of type
 
-// Type conversion
-let str_val = str(42)               // Convert to string: "42"
-let int_val = int("42")             // Convert to int: 42
-let float_val = float("3.14")       // Convert to float: 3.14
-let bool_val = bool("true")         // Convert to boolean: true
+// Type conversion functions
+let str_val = str(42)                       // Convert to string: "42"
+let int_val = int("42")                     // Convert to int: 42
+let float_val = float("3.14")               // Convert to float: 3.14
+let bool_val = bool("true")                 // Convert to boolean: true
+let list_val = list((1, 2, 3))              // Convert to list: [1, 2, 3]
+let tuple_val = tuple([1, 2, 3])            // Convert to tuple: (1, 2, 3)
+let set_val = set([1, 2, 2, 3])             // Convert to set: {1, 2, 3}
+let dict_val = dict([["a", 1], ["b", 2]])   // Convert to dict: {"a": 1, "b": 2}
+
+// JSON functions
+let json_str = JSON.stringify(obj)          // Convert object to JSON string
+let parsed = JSON.parse(json_str)           // Parse JSON string to object
+let formatted = JSON.pretty(obj)            // Format object as readable JSON
+
+// System functions
+exit(0)                                     // Exit program with code
+sleep(milliseconds)                         // Pause execution
+getEnv("PATH")                              // Get environment variable
+setEnv("DEBUG", "true")                     // Set environment variable
 ```
 
 ### Math Functions
 
 ```ore
-abs(-10)                            // 10
-min(5, 10)                          // 5
-max(5, 10)                          // 10
-round(3.7)                          // 4
-floor(3.7)                          // 3
-ceil(3.2)                           // 4
+abs(-10)                            // 10 (absolute value)
+min(5, 10)                          // 5 (minimum value)
+max(5, 10)                          // 10 (maximum value)
+round(3.7)                          // 4 (round to nearest integer)
+floor(3.7)                          // 3 (round down)
+ceil(3.2)                           // 4 (round up)
+trunc(3.7)                          // 3 (truncate decimal part)
 random()                            // Random float between 0 and 1
 randomInt(1, 10)                    // Random integer between 1 and 10
 sin(3.14)                           // Sine
 cos(3.14)                           // Cosine
 tan(3.14)                           // Tangent
+asin(0.5)                           // Arc sine
+acos(0.5)                           // Arc cosine
+atan(1.0)                           // Arc tangent
 sqrt(16)                            // 4 (square root)
+cbrt(27)                            // 3 (cube root)
 pow(2, 3)                           // 8 (same as 2**3)
 log(100)                            // Natural logarithm
 log10(100)                          // 2 (base-10 logarithm)
-```
-
-### List Functions
-
-```ore
-// Basic operations
-list[0]                            // Get first element
-list.push(6)                       // Add to end: [1, 2, 3, 4, 5, 6]
-let popped = list.pop()            // Remove from end, returns 6
-list.first()                       // Get first element: 1
-list.last()                        // Get last element: 5
-list.insert(0, 0)                  // Insert at position: [0, 1, 2, 3, 4, 5]
-list.remove(3)                     // Remove by value: [0, 1, 2, 4, 5]
-list.removeAt(2)                   // Remove by index: [0, 1, 4, 5]
-list[1..3]                         // Get sublist: [1, 4]
-
-// Transformations
-list.join(", ")                    // "0, 1, 4, 5"
-list.sort()                        // Sort in place
-list.sorted()                      // Get sorted copy
-list.reversed()                    // Get reversed copy
-
-// Functional operations
-list.map(x => x * 2)               // [0, 2, 8, 10]
-list.filter(x => x > 2)            // [4, 5]
-list.reduce((acc, x) => acc + x, 0) // Sum: 10
-list.forEach(x => print(x))        // Iterate without returning
-
-// Information
-list.sum()                         // 10
-list.average()                     // 2.5
-list.min()                         // 0
-list.max()                         // 5
-list.count(x => x > 2)             // 2
-list.indexOf(4)                    // 2
-list.contains(3)                   // false
-list.any(x => x > 4)               // true
-list.all(x => x >= 0)              // true
+log2(8)                             // 3 (base-2 logarithm)
+exp(1)                              // e^1 (exponential)
 ```
 
 ### String Functions
@@ -1212,6 +1195,9 @@ name.startsWith("dhruv")          // true
 name.endsWith("rawat")            // true
 name.indexOf("r")                 // 6
 name.lastIndexOf("a")             // 9
+name.find(/\w+/)                  // Find using regex
+name.findAll(/a/g)                // Find all occurrences with regex
+name.match(/[a-z]+/)              // Match pattern
 
 // Extracting
 name.charAt(0)                    // "d"
@@ -1220,58 +1206,348 @@ name.slice(6)                     // "rawat"
 
 // Formatting
 "{} is {}".format(name, "cool")   // "dhruv rawat is cool"
+name.padStart(15, "-")            // "----dhruv rawat"
+name.padEnd(15, "-")              // "dhruv rawat----"
+name.repeat(2)                    // "dhruv rawatdhruv rawat"
 ```
 
-### Dictionary Functions
+### Array/List Functions
 
 ```ore
-let dict = {"name": "John", "age": 30}
+// Create arrays
+let arr = [1, 2, 3, 4, 5]
+let filled = Array.fill(5, 0)             // [0, 0, 0, 0, 0]
+let ranged = Array.range(1, 6)            // [1, 2, 3, 4, 5]
+let fromString = Array.fromString("abc")  // ['a', 'b', 'c']
+let spreadCopy = [...arr]                 // Copy array with spread
 
-// Information
-dict.hasKey("name")               // true
-dict.keys()                       // ["name", "age"]
-dict.values()                     // ["John", 30]
-dict.entries()                    // [["name", "John"], ["age", 30]]
-dict.size()                       // 2
-dict.isEmpty()                    // false
+// Array operations
+array.at(-1)                      // Get element with support for negative indices
+array.includes(value)             // Check if array includes value (alias for contains)
+array.findLast(predicate)         // Find last element that matches predicate
+array.findLastIndex(predicate)    // Find index of last matching element
+array.with(index, value)          // Return new array with value at index
+array.toSorted()                  // Get sorted copy (same as sorted)
+array.toReversed()                // Get reversed copy
+array.toSpliced(index, count)     // Get copy with elements removed
+array.concat(otherArray)          // Combine arrays
 
-// Modification
-dict.set("email", "john@example.com")  // Add or update
-dict.remove("age")                     // Remove key
-dict.clear()                           // Remove all entries
-dict.merge({"city": "New York"})       // Combine dictionaries
+// Advanced array methods
+array.zip(otherArray)             // Combine corresponding elements
+array.partition(predicate)        // Split into arrays of matching/non-matching
+array.unique()                    // Get unique elements (same as distinct)
+array.shuffle()                   // Randomize array order
+array.sample()                    // Get random element
+array.rotate(n)                   // Rotate elements by n positions
+array.binarySearch(value)         // Binary search (on sorted array)
 ```
 
-### Set Functions
+### Date and Time Functions
 
 ```ore
-let set1 = {1, 2, 3, 4, 5}
-let set2 = {4, 5, 6, 7}
+// Creating dates
+let now = Date.now()                          // Current date and time
+let date = Date.parse("2023-01-15")           // Parse from string
+let specificDate = Date.create(2023, 1, 15)   // Year, month, day
 
-// Set operations
-set1.union(set2)                  // {1, 2, 3, 4, 5, 6, 7}
-set1.intersection(set2)           // {4, 5}
-set1.difference(set2)             // {1, 2, 3}
-set2.difference(set1)             // {6, 7}
-set1.symmetricDifference(set2)    // {1, 2, 3, 6, 7}
+// Date components
+date.year                                     // Get year
+date.month                                    // Get month
+date.day                                      // Get day
+date.hour                                     // Get hour
+date.minute                                   // Get minute
+date.second                                   // Get second
+date.weekday                                  // Get day of week
 
-// Testing
-set1.isSubset({1, 2})             // true
-{1, 2, 3, 4, 5, 6}.isSuperset(set1) // true
-set1.isDisjoint({6, 7, 8})        // true (no common elements)
+// Formatting dates
+date.format("YYYY-MM-DD")                     // Format as string
+date.toISOString()                            // ISO format string
+date.toUTCString()                            // UTC format string
 
-// Modification
-set1.add(6)                       // Add element
-set1.remove(3)                    // Remove element
-set1.clear()                      // Remove all elements
+// Date operations
+date.add({days: 5, hours: 2})                 // Add time units
+date.subtract({months: 1})                    // Subtract time units
+date.startOf("month")                         // Beginning of month
+date.endOf("day")                             // End of day
+Date.diff(date1, date2, "days")               // Difference in days
+```
+
+### Regular Expression Functions
+
+```ore
+// Creating regular expressions
+let regex = /pattern/flags
+let regexObj = RegExp("pattern", "flags")
+
+// Regex methods
+regex.test("string")                         // Test if pattern matches
+regex.exec("string")                         // Execute search, return match info
+"string".match(regex)                        // Get matches
+"string".replace(regex, replacement)         // Replace matches
+"string".split(regex)                        // Split string by pattern
+
+// Regex flags
+// i - case insensitive
+// g - global (all matches)
+// m - multiline
+// s - dotall (dot matches newlines)
+```
+
+### Cryptography and Hashing
+
+```ore
+// Hashing functions
+let md5 = Crypto.md5("string")                // MD5 hash
+let sha256 = Crypto.sha256("string")          // SHA-256 hash
+let hash = Crypto.hash("string", "algorithm") // Generic hash
+
+// Encoding/decoding
+let base64 = Crypto.encodeBase64("string")    // Base64 encode
+let decoded = Crypto.decodeBase64(base64)     // Base64 decode
+let hex = Crypto.encodeHex(bytes)             // Hex encode
+let fromHex = Crypto.decodeHex(hex)           // Hex decode
+
+// Encryption/decryption
+let encrypted = Crypto.encrypt(data, key, iv) // Encrypt data
+let decrypted = Crypto.decrypt(encrypted, key, iv) // Decrypt data
+```
+
+## Collection Examples
+
+### Practical List Examples
+
+```ore
+// Task: Process a list of student scores and find those who passed
+let scores = [85, 42, 97, 65, 55, 73, 31, 79, 60]
+let passingThreshold = 60
+
+// Find passing scores and corresponding students
+let studentNames = ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hannah", "Ivy"]
+let passedStudents = []
+
+for (score, i in scores) {
+    if (score >= passingThreshold) {
+        passedStudents.push({
+            name: studentNames[i],
+            score: score
+        })
+    }
+}
+
+// Sort passed students by score (descending)
+passedStudents.sort((a, b) => b.score - a.score)
+
+// Print results
+println("Passing students:")
+for (student, i in passedStudents) {
+    println(f"{i+1}. {student.name}: {student.score}")
+}
+```
+
+### Practical Tuple Examples
+
+```ore
+// Task: Working with coordinate points (immutable)
+let points = [
+    (2, 3),    // Point 1 (x, y)
+    (5, 1),    // Point 2
+    (7, 8),    // Point 3
+    (3, 7)     // Point 4
+]
+
+// Calculate distance from origin for each point
+let distances = points.map(point => {
+    let (x, y) = point  // Tuple destructuring
+    return math.sqrt(x*x + y*y)
+})
+
+// Sort points by distance from origin
+let sortedByDistance = [...points]  // Create a copy
+sortedByDistance.sort((p1, p2) => {
+    let d1 = math.sqrt(p1[0]*p1[0] + p1[1]*p1[1])
+    let d2 = math.sqrt(p2[0]*p2[0] + p2[1]*p2[1])
+    return d1 - d2
+})
+
+// Point to string utility function
+fn pointToString(point) {
+    let (x, y) = point
+    return f"({x}, {y})"
+}
+
+// Print results
+println("Points sorted by distance from origin:")
+for (point, i in sortedByDistance) {
+    let (x, y) = point
+    let dist = math.sqrt(x*x + y*y)
+    println(f"{i+1}. {pointToString(point)} - Distance: {dist.toFixed(2)}")
+}
+```
+
+### Practical Dictionary Examples
+
+```ore
+// Task: Analyze a text and count word frequencies
+let text = "the quick brown fox jumps over the lazy dog the fox was quick"
+let words = text.toLowerCase().split(" ")
+let wordCounts = {}
+
+// Count word frequencies
+for (word in words) {
+    if (wordCounts.hasKey(word)) {
+        wordCounts[word] += 1
+    } else {
+        wordCounts[word] = 1
+    }
+}
+
+// Alternative using get with default
+for (word in words) {
+    wordCounts[word] = wordCounts.get(word, 0) + 1
+}
+
+// Sort words by frequency (descending)
+let sortedWords = wordCounts.entries().sort((a, b) => b[1] - a[1])
+
+// Print results
+println("Word frequency:")
+for (entry, i in sortedWords) {
+    let [word, count] = entry
+    println(f"{i+1}. '{word}': {count}")
+}
+```
+
+### Practical Set Examples
+
+```ore
+// Task: Find common elements in multiple datasets
+let datasetA = {1, 3, 5, 7, 9, 11, 13, 15}
+let datasetB = {3, 6, 9, 12, 15, 18}
+let datasetC = {2, 3, 5, 7, 11, 13, 15, 17, 19}
+
+// Find elements common to all three datasets
+let commonElements = datasetA.intersection(datasetB).intersection(datasetC)
+
+// Find elements in A and B but not in C
+let inAandBnotC = datasetA.intersection(datasetB).difference(datasetC)
+
+// Find elements unique to each dataset
+let uniqueToA = datasetA.difference(datasetB.union(datasetC))
+let uniqueToB = datasetB.difference(datasetA.union(datasetC))
+let uniqueToC = datasetC.difference(datasetA.union(datasetB))
+
+// Print results
+println(f"Common to all three: {commonElements}")
+println(f"In A and B but not C: {inAandBnotC}")
+println(f"Unique to A: {uniqueToA}")
+println(f"Unique to B: {uniqueToB}")
+println(f"Unique to C: {uniqueToC}")
+```
+
+### Practical FrozenSet Examples
+
+```ore
+// Task: Use immutable sets as dictionary keys
+let employeesByDepartment = {
+    frozenset({"Engineering", "Development", "Programming"}): [
+        "Alice Johnson", 
+        "Bob Smith",
+        "Charlie Davis"
+    ],
+    frozenset({"Marketing", "Sales", "Communication"}): [
+        "David Wilson",
+        "Eve Brown"
+    ],
+    frozenset({"HR", "Recruitment", "People Operations"}): [
+        "Frank Miller"
+    ]
+}
+
+// Function to find department by tag
+fn findDepartmentByTag(tag) {
+    for (depTags, employees in employeesByDepartment) {
+        if (depTags.contains(tag)) {
+            return employees
+        }
+    }
+    return []
+}
+
+// Print results
+println("Employees in Development department:")
+for (emp in findDepartmentByTag("Development")) {
+    println(f"- {emp}")
+}
+
+println("\nEmployees in Marketing department:")
+for (emp in findDepartmentByTag("Marketing")) {
+    println(f"- {emp}")
+}
+```
+
+## Async/Await
+
+### Async Functions
+
+```ore
+// Define an async function
+async fn fetchData(url: string): string {
+    // Simulate HTTP request
+    await sleep(100)  // Wait for 100ms
+    return "Data from ${url}"
+}
+
+// Use async/await in another function
+async fn processData() {
+    print("Fetching data...")
+    let data = await fetchData("https://api.example.com")
+    print("Received: ${data}")
+    return data
+}
+```
+
+### Error Handling with Async/Await
+
+```ore
+async fn fetchWithErrorHandling(url: string): string {
+    try {
+        let response = await fetch(url)
+        
+        if (!response.ok) {
+            throw "HTTP Error: ${response.status}"
+        }
+        
+        return await response.text()
+    } catch (err) {
+        print("Error fetching data: ${err}")
+        return ""
+    }
+}
+```
+
+### Parallel Execution
+
+```ore
+async fn fetchMultiple() {
+    // Execute multiple async operations in parallel
+    let data1 = fetchData("https://api.example.com/endpoint1")
+    let data2 = fetchData("https://api.example.com/endpoint2")
+    
+    // Wait for both to complete
+    let result1 = await data1
+    let result2 = await data2
+    
+    print("Data 1: ${result1}")
+    print("Data 2: ${result2}")
+}
 ```
 
 ## Examples
 
-### Simple Program
+### Basic Program
 
 ```ore
-fn main() {
+fn main(argc, args) {
     print("Hello, Ore!")
     
     for (i in 1..5) {
@@ -1289,7 +1565,7 @@ fn fibonacci(n: int): int {
     return fibonacci(n-1) + fibonacci(n-2)
 }
 
-fn main() {
+fn main(argc, args) {
     print("First 10 Fibonacci numbers:")
     for (i in 0..<10) {
         print("fibonacci(${i}) = ${fibonacci(i)}")
@@ -1335,8 +1611,72 @@ fn processLogFile(path: string) {
     print("Total errors found: ${errorCount}")
 }
 
-fn main() {
+fn main(argc, args) {
     processLogFile("application.log")
+}
+```
+
+### Command Line Tool
+
+```ore
+fn main(argc, args) {
+    // argc contains the number of command line arguments
+    // args is a list of all arguments, with args[0] being the program name
+    
+    if (argc < 2) {
+        print("Usage: ${args[0]} <filename>")
+        exit(1)
+    }
+    
+    let filename = args[1]
+    
+    try {
+        let content = fs.readFile(filename)
+        let lines = content.split("\n")
+        
+        print("File ${filename} has ${lines.length} lines")
+        
+        let wordCount = 0
+        for (line in lines) {
+            let words = line.split(/\s+/).filter(w => w.length > 0)
+            wordCount += words.length
+        }
+        
+        print("Word count: ${wordCount}")
+    } catch (err) {
+        print("Error: ${err}")
+        exit(1)
+    }
+}
+```
+
+### Async HTTP Request
+
+```ore
+async fn main(argc, args) {
+    try {
+        let url = "https://api.example.com/data"
+        print("Fetching data from ${url}...")
+        
+        let data = await fetchData(url)
+        let parsed = json.parse(data)
+        
+        print("Received ${parsed.items.length} items")
+        
+        for (item, i in parsed.items) {
+            print("${i+1}. ${item.name}")
+        }
+    } catch (err) {
+        print("Error: ${err}")
+    }
+}
+
+async fn fetchData(url: string): string {
+    let resp = await http.get(url)
+    if (resp.status != 200) {
+        throw "HTTP Error: ${resp.status}"
+    }
+    return resp.body
 }
 ```
 
@@ -1614,204 +1954,145 @@ let set_keys = {
 } 
 ```
 
-## Async/Await
+## Collection Types Comparison
 
-### Async Functions
+| Feature                | List           | Tuple           | Dictionary    | Set            | Frozen Set     |
+|------------------------|----------------|-----------------|---------------|----------------|----------------|
+| **Mutability**         | Mutable        | Immutable       | Mutable       | Mutable        | Immutable      |
+| **Ordered**            | Yes            | Yes             | No            | No             | No             |
+| **Indexable**          | Yes (by index) | Yes (by index)  | Yes (by key)  | No             | No             |
+| **Heterogeneous**      | Yes            | Yes             | Keys: Yes<br>Values: Yes | Yes | Yes            |
+| **Duplicates**         | Allowed        | Allowed         | No (unique keys) | No (unique elements) | No (unique elements) |
+| **Hashable (as key)**  | No             | Yes             | No            | No             | Yes            |
+| **Common Use Cases**   | Sequences, ordered data, iteration | Fixed collections, return multiple values | Key-value associations, lookups | Unique items, membership testing | Immutable set operations, dictionary keys |
+| **Memory Usage**       | Medium         | Low             | High          | Medium         | Medium         |
+| **Literal Syntax**     | [1, 2, 3]      | (1, 2, 3)       | {"a": 1}      | {1, 2, 3}      | frozenset({1, 2, 3}) |
 
-```ore
-// Define an async function
-async fn fetchData(url: string): string {
-    // Simulate HTTP request
-    await sleep(100)  // Wait for 100ms
-    return "Data from ${url}"
-}
+## Operators
 
-// Use async/await in another function
-async fn processData() {
-    print("Fetching data...")
-    let data = await fetchData("https://api.example.com")
-    print("Received: ${data}")
-    return data
-}
-```
-
-### Error Handling with Async/Await
+### Arithmetic Operators
 
 ```ore
-async fn fetchWithErrorHandling(url: string): string {
-    try {
-        let response = await fetch(url)
-        
-        if (!response.ok) {
-            throw "HTTP Error: ${response.status}"
-        }
-        
-        return await response.text()
-    } catch (err) {
-        print("Error fetching data: ${err}")
-        return ""
-    }
-}
+let a = 10
+let b = 3
+
+a + b        // 13 (addition)
+a - b        // 7 (subtraction)
+a * b        // 30 (multiplication)
+a / b        // 3.33333 (division)
+a % b        // 1 (modulo/remainder)
+a // b       // 3 (integer division)
+a ** b       // 1000 (exponentiation)
+
+// Increment/decrement
+a++          // Increment by 1
+b--          // Decrement by 1
 ```
 
-### Parallel Execution
+### Comparison Operators
 
 ```ore
-async fn fetchMultiple() {
-    // Execute multiple async operations in parallel
-    let data1 = fetchData("https://api.example.com/endpoint1")
-    let data2 = fetchData("https://api.example.com/endpoint2")
-    
-    // Wait for both to complete
-    let result1 = await data1
-    let result2 = await data2
-    
-    print("Data 1: ${result1}")
-    print("Data 2: ${result2}")
-}
+a == b       // false (equal to)
+a != b       // true (not equal to)
+a > b        // true (greater than)
+a < b        // false (less than)
+a >= b       // true (greater than or equal to)
+a <= b       // false (less than or equal to)
+a === b      // false (strict equality - same type and value)
+a !== b      // true (strict inequality)
 ```
 
-## Examples
-
-### Basic Program
+### Logical Operators
 
 ```ore
-fn main(argc, args) {
-    print("Hello, Ore!")
-    
-    for (i in 1..5) {
-        print("${i} squared is ${i*i}")
-    }
-}
+true && false    // false (logical AND)
+true || false    // true (logical OR)
+!true            // false (logical NOT)
 ```
 
-### Fibonacci Sequence
+### Identity Operators
 
 ```ore
-@memoize
-fn fibonacci(n: int): int {
-    if (n <= 1) return n
-    return fibonacci(n-1) + fibonacci(n-2)
-}
+// Check if two variables reference the same object
+let x = [1, 2, 3]
+let y = x
+let z = [1, 2, 3]
 
-fn main(argc, args) {
-    print("First 10 Fibonacci numbers:")
-    for (i in 0..<10) {
-        print("fibonacci(${i}) = ${fibonacci(i)}")
-    }
-}
+x is y       // true (same object)
+x is z       // false (different objects)
+x is not z   // true (different objects)
 ```
 
-### File Processing Example
+### Membership Operators
 
 ```ore
-fn processLogFile(path: string) {
-    // Check if file exists
-    if (!File.exists(path)) {
-        print("Error: File not found")
-        return
-    }
-    
-    // Read the log file
-    let lines = File.readLines(path)
-    
-    // Process and filter the lines
-    let errorCount = 0
-    let errorLines = []
-    
-    for (line, i in lines) {
-        if (line.contains("ERROR")) {
-            errorCount++
-            errorLines.push("Line ${i+1}: ${line}")
-        }
-    }
-    
-    // Generate report file
-    with (let reportFile = File.open("error_report.txt", "w")) {
-        reportFile.write("Error Report for ${path}\n")
-        reportFile.write("Total errors found: ${errorCount}\n\n")
-        
-        for (errorLine in errorLines) {
-            reportFile.write("${errorLine}\n")
-        }
-    }
-    
-    print("Report generated: error_report.txt")
-    print("Total errors found: ${errorCount}")
-}
+// Check if a value exists in a collection
+let nums = [1, 2, 3, 4, 5]
+let user = {"name": "Dhruv", "age": 25}
 
-fn main(argc, args) {
-    processLogFile("application.log")
-}
+3 in nums            // true
+6 in nums            // false
+6 not in nums        // true
+"name" in user       // true
+"email" in user      // false
 ```
 
-### Command Line Tool
+### Type Checking Operators
 
 ```ore
-fn main(argc, args) {
-    // argc contains the number of command line arguments
-    // args is a list of all arguments, with args[0] being the program name
-    
-    if (argc < 2) {
-        print("Usage: ${args[0]} <filename>")
-        exit(1)
-    }
-    
-    let filename = args[1]
-    
-    try {
-        let content = fs.readFile(filename)
-        let lines = content.split("\n")
-        
-        print("File ${filename} has ${lines.length} lines")
-        
-        let wordCount = 0
-        for (line in lines) {
-            let words = line.split(/\s+/).filter(w => w.length > 0)
-            wordCount += words.length
-        }
-        
-        print("Word count: ${wordCount}")
-    } catch (err) {
-        print("Error: ${err}")
-        exit(1)
-    }
-}
+let value = 42
+
+value is int         // true
+value is string      // false
+value is not string  // true
 ```
 
-### Async HTTP Request
+### Bitwise Operators
 
 ```ore
-async fn main(argc, args) {
-    try {
-        let url = "https://api.example.com/data"
-        print("Fetching data from ${url}...")
-        
-        let data = await fetchData(url)
-        let parsed = json.parse(data)
-        
-        print("Received ${parsed.items.length} items")
-        
-        for (item, i in parsed.items) {
-            print("${i+1}. ${item.name}")
-        }
-    } catch (err) {
-        print("Error: ${err}")
-    }
-}
+let a = 5            // 101 in binary
+let b = 3            // 011 in binary
 
-async fn fetchData(url: string): string {
-    let resp = await http.get(url)
-    if (resp.status != 200) {
-        throw "HTTP Error: ${resp.status}"
-    }
-    return resp.body
-}
+a & b                // 1 (bitwise AND)
+a | b                // 7 (bitwise OR)
+a ^ b                // 6 (bitwise XOR)
+~a                   // -6 (bitwise NOT)
+a << 1               // 10 (left shift by 1)
+a >> 1               // 2 (right shift by 1)
 ```
 
-## Collections: Lists
+### Assignment Operators
 
-// ... existing code ...
+```ore
+let x = 10           // Simple assignment
+x += 5               // 15 (add and assign)
+x -= 3               // 12 (subtract and assign)
+x *= 2               // 24 (multiply and assign)
+x /= 4               // 6 (divide and assign)
+x %= 4               // 2 (modulo and assign)
+x **= 2              // 4 (exponentiate and assign)
+```
+
+### Special Operators
+
+```ore
+// Ternary operator
+let age = 20
+let status = age >= 18 ? "adult" : "minor"    // "adult"
+
+// Null coalescing
+let display_name = user_name ?? "Anonymous"   // Default if null
+
+// Pipeline operator
+let result = data |> filter(x => x > 0) |> map(x => x * 2) |> sum()
+
+// Spread operator
+let combined = [...arr1, ...arr2]
+
+// Range operators
+1..10        // Inclusive range: 1, 2, 3, ..., 10
+1..<10       // Exclusive range: 1, 2, 3, ..., 9
+```
 
 ---
 
