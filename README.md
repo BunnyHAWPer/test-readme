@@ -3,26 +3,25 @@
 Ore is a modern, developer-friendly programming language combining the best features from multiple programming paradigms. It's designed to be expressive, powerful, and easy to learn.
 
 ```ore
-// A colorful example of the Ore programming language
+// A simple example of the Ore programming language
 import math
-import Terminal
 
-fn main() {
-    // Welcome message with terminal styling
-    println(Terminal.bold(Terminal.cyan("Welcome to the Ore Programming Language!")))
+fn main(argc, args) {
+    // argc contains the number of arguments
+    // args[0] is the program filename
     
     // Variable declarations
     let name = "World"
     let numbers = [1, 4, 9, 16, 25]
     
-    // String interpolation and f-strings
+    // String interpolation
     println(f"Hello, {name}!")
     
     // Functional operations on collections
     let squares = numbers.map(n => math.sqrt(n))
     
-    // Looping with for-in and range
-    println(Terminal.yellow("First 5 square roots:"))
+    // Looping with for-in
+    println("First 5 square roots:")
     for (num, i in squares) {
         println(f"{i+1}. √{numbers[i]} = {num}")
     }
@@ -31,13 +30,6 @@ fn main() {
     with (let file = File.open("welcome.txt", "w")) {
         file.write(f"Welcome to Ore, {name}!")
     }
-    
-    // Creating a simple chart
-    Chart.bar(
-        ["Easy", "Powerful", "Fun"], 
-        [90, 95, 100],
-        { title: "Why Choose Ore?" }
-    )
 }
 ```
 
@@ -69,7 +61,6 @@ fn main() {
 - [Modules](#modules)
 - [Type Inspection](#type-inspection)
 - [File I/O](#file-io)
-- [Data Visualization](#data-visualization)
 - [Concurrency](#concurrency)
 - [Built-in Functions](#built-in-functions)
 - [Examples](#examples)
@@ -1118,107 +1109,6 @@ let normalized = Path.normalize("path/../other/./file.txt") // "other/file.txt"
 let absolutePath = Path.absolute("relative/path")
 ```
 
-## Data Visualization
-
-### Inspecting Variables
-
-```ore
-// Print detailed information about variables
-inspect(myVariable)                      // Outputs type, structure, and content
-dump(complexObject)                      // Recursively dump object contents
-```
-
-### Pretty Printing
-
-```ore
-// Format JSON data for readability
-let userData = {
-    "name": "Alice",
-    "age": 28,
-    "skills": ["JavaScript", "Python", "Ore"]
-}
-
-// Formatted JSON output (with indentation)
-print(JSON.stringify(userData, null, 2))
-
-// Shorter alternative
-print(JSON.pretty(userData))
-
-// Display tabular data
-let users = [
-    {"id": 1, "name": "Alice", "role": "Admin"},
-    {"id": 2, "name": "Bob", "role": "User"},
-    {"id": 3, "name": "Charlie", "role": "User"}
-]
-
-Table.print(users)
-// Output:
-// ┌────┬─────────┬────────┐
-// │ id │ name    │ role   │
-// ├────┼─────────┼────────┤
-// │ 1  │ Alice   │ Admin  │
-// │ 2  │ Bob     │ User   │
-// │ 3  │ Charlie │ User   │
-// └────┴─────────┴────────┘
-```
-
-### Debugging Tools
-
-```ore
-// Debug expressions with values
-debug(x + y)          // Outputs: "x + y = 15" (assuming x=10, y=5)
-
-// Assertions
-assert(user.age >= 18, "User must be at least 18 years old")
-
-// Performance measurement
-time(() => {
-    // Code to measure
-    for (i in 0..1000) {
-        fibonacci(i)
-    }
-})  // Outputs: "Time elapsed: 45ms"
-```
-
-### Terminal Formatting
-
-```ore
-// Colored output
-print(Terminal.red("Error: File not found"))
-print(Terminal.green("Success: Data saved"))
-print(Terminal.yellow("Warning: Low disk space"))
-
-// Text styling
-print(Terminal.bold("Important message"))
-print(Terminal.underline("Emphasized text"))
-print(Terminal.italic("Note: Read carefully"))
-
-// Combined styling
-print(Terminal.bold(Terminal.red("Critical error!")))
-```
-
-### Simple Charts
-
-```ore
-// Bar chart
-Chart.bar(
-    ["Mon", "Tue", "Wed", "Thu", "Fri"], 
-    [120, 200, 150, 80, 190]
-)
-
-// Line chart
-Chart.line(
-    [1, 2, 3, 4, 5], 
-    [10, 25, 15, 30, 45]
-)
-
-// Pie chart
-Chart.pie(
-    ["Product A", "Product B", "Product C"], 
-    [30, 50, 20]
-)
-```
-
 ## Concurrency
 
 ### Futures and Promises
@@ -1690,7 +1580,7 @@ fn main() {
 ### Concurrency Example
 
 ```ore
-fn main() {
+fn main(argc, args) {
     // URL list to fetch data from
     let urls = [
         "https://api.example.com/users",
@@ -1733,7 +1623,7 @@ fn main() {
         
         // Handle errors
         worker.onError(error => {
-            print(Terminal.red("Error fetching ${url}: ${error}"))
+            print("Error fetching ${url}: ${error}")
             
             // Still need to update the progress
             withLock(mutex, () => {
@@ -1764,7 +1654,7 @@ fn main() {
         results.sort((a, b) => a.time - b.time)
         
         // Display results
-        println("\n" + Terminal.bold("Results:"))
+        println("\nResults:")
         Table.print(results.map(r => {
             return {
                 "URL": r.url,
@@ -1773,13 +1663,6 @@ fn main() {
                 "Data Size": r.error ? 0 : r.data.length
             }
         }))
-        
-        // Display timing chart
-        Chart.bar(
-            results.map(r => r.url.split("/").pop()),
-            results.map(r => r.time),
-            { title: "Response Times (ms)" }
-        )
     }
     
     // Start collecting results
@@ -1790,7 +1673,7 @@ fn main() {
 ### HTTP Request
 
 ```ore
-async fn main() {
+async fn main(argc, args) {
     try {
         let url = "https://api.example.com/data"
         print("Fetching data from ${url}...")
@@ -1820,7 +1703,10 @@ async fn fetchData(url: string): string {
 ### Command Line Tool
 
 ```ore
-fn main(argc, args[]) {
+fn main(argc, args) {
+    // argc contains the number of command line arguments
+    // args is a list of all arguments, with args[0] being the program name
+    
     if (argc < 2) {
         print("Usage: ${args[0]} <filename>")
         exit(1)
@@ -1857,6 +1743,8 @@ let numbers = [1, 2, 3, 4, 5]           // Basic list
 let mixed = [1, "two", 3.0, true]       // Heterogeneous list
 let empty_list = []                     // Empty list
 let typed_list: int[] = [1, 2, 3]       // Typed list
+let from_range = list(1..5)             // Create from range
+let from_set = list({1, 2, 3})          // Create from set
 ```
 
 ### List Indexing and Slicing
@@ -1867,18 +1755,25 @@ let last = numbers[-1]                  // 5
 let sub_list = numbers[1..3]            // [2, 3, 4]
 let every_other = numbers[::2]          // [1, 3, 5]
 let reversed_list = numbers[::-1]       // [5, 4, 3, 2, 1]
+numbers[1] = 10                         // Modify: [1, 10, 3, 4, 5]
 ```
 
 ### List Operations
 
 ```ore
 numbers.push(6)                         // Add to end: [1, 2, 3, 4, 5, 6]
-let popped = numbers.pop()              // Remove from end, returns 6
+numbers.pushAll([7, 8, 9])              // Add multiple: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+let popped = numbers.pop()              // Remove from end, returns value
 numbers.insert(0, 0)                    // Insert at position: [0, 1, 2, 3, 4, 5]
-numbers.remove(3)                       // Remove by value
+numbers.insertAll(2, [10, 11])          // Insert multiple items at position
+numbers.remove(3)                       // Remove by value (first occurrence)
+numbers.removeAll(3)                    // Remove all occurrences of value
 numbers.removeAt(2)                     // Remove by index
+numbers.clear()                         // Remove all elements
 let sorted_list = numbers.sorted()      // Returns sorted copy
+let sorted_custom = numbers.sorted((a, b) => b - a)  // Custom sort (descending)
 numbers.sort()                          // Sorts in place
+numbers.reverse()                       // Reverse in place
 let joined_str = numbers.join(", ")     // "0, 1, 4, 5"
 ```
 
@@ -1887,8 +1782,12 @@ let joined_str = numbers.join(", ")     // "0, 1, 4, 5"
 ```ore
 let has_value = numbers.contains(4)     // true
 let index = numbers.indexOf(4)          // 2
+let last_index = numbers.lastIndexOf(4) // Find last occurrence
 let is_empty = numbers.isEmpty()        // false
 let size = numbers.length               // 4
+let deep_copy = numbers.clone()         // Create a deep copy
+let shallow_copy = numbers.slice()      // Create a shallow copy
+let flattened = [[1,2],[3,4]].flatten() // [1,2,3,4]
 ```
 
 ### Functional Operations
@@ -1897,7 +1796,14 @@ let size = numbers.length               // 4
 let doubled = numbers.map(x => x * 2)   // [0, 2, 8, 10]
 let filtered = numbers.filter(x => x > 2) // [4, 5]
 let sum_val = numbers.reduce((acc, x) => acc + x, 0) // 10
+let flat_mapped = numbers.flatMap(x => [x, x*2])    // [1, 2, 2, 4, 3, 6, ...]
 numbers.forEach(x => print(x))          // Prints each item
+let found = numbers.find(x => x > 10)   // First element matching condition or null
+let found_index = numbers.findIndex(x => x > 10)  // Index of first matching element or -1
+let all_match = numbers.all(x => x > 0)           // true if all elements satisfy condition
+let any_match = numbers.any(x => x > 10)          // true if any element satisfies condition
+let chunk_size_2 = numbers.chunk(2)     // [[1,2], [3,4], [5]]
+let grouped = numbers.groupBy(x => x % 2)  // {0: [2,4], 1: [1,3,5]}
 ```
 
 ### Statistical Methods
@@ -1908,6 +1814,8 @@ let avg = numbers.average()             // 2.5
 let min_val = numbers.min()             // 0
 let max_val = numbers.max()             // 5
 let count_val = numbers.count(x => x > 2) // 2
+let product = numbers.product()         // Product of all elements
+let distinct = [1,2,2,3,3,3].distinct() // [1,2,3]
 ```
 
 ### List Comprehensions
@@ -1916,6 +1824,7 @@ let count_val = numbers.count(x => x > 2) // 2
 let evens = [x for x in numbers if x % 2 == 0]
 let squares = [x*x for x in 1..10]  // Using range
 let matrix = [[i*j for i in 1..3] for j in 1..3]  // Nested comprehension
+let zip_result = [(a,b) for a,b in zip(list1, list2)]  // Zip comprehension
 ```
 
 ## Collections: Tuples
@@ -1927,6 +1836,8 @@ let tuple = (1, "hello", 3.14)          // Basic tuple
 let empty_tuple = ()                    // Empty tuple
 let single_item_tuple = (1,)            // Note the comma
 let nested_tuple = (1, (2, 3), 4)       // Nested tuple
+let from_list = tuple([1, 2, 3])        // Create from list
+let typed_tuple: (int, string) = (1, "hello")  // Typed tuple
 ```
 
 ### Tuple Indexing and Slicing
@@ -1942,8 +1853,11 @@ let tuple_reverse = tuple[::-1]         // (3.14, "hello", 1)
 
 ```ore
 let tuple_length = tuple.length         // 3
+let tuple_count = tuple.count("hello")  // 1 (count occurrences)
 let has_hello = tuple.contains("hello") // true
 let hello_index = tuple.indexOf("hello") // 1
+let as_list = tuple.toList()            // Convert to list
+let tuple_string = tuple.toString()     // String representation
 ```
 
 ### Creating New Tuples (Immutable)
@@ -1952,6 +1866,16 @@ let hello_index = tuple.indexOf("hello") // 1
 let extended_tuple = tuple.append(42)   // (1, "hello", 3.14, 42)
 let combined_tuple = tuple.concat((5, 6)) // (1, "hello", 3.14, 5, 6)
 let modified_tuple = tuple.replace(1, "world") // (1, "world", 3.14)
+let without_item = tuple.remove("hello") // (1, 3.14)
+let element_slice = tuple.slice(0, 2)   // (1, "hello")
+```
+
+### Tuple Unpacking
+
+```ore
+let (x, y, z) = tuple                   // x=1, y="hello", z=3.14
+let (first, *rest) = (1, 2, 3, 4)       // first=1, rest=[2,3,4]
+let (head, *middle, tail) = (1, 2, 3, 4) // head=1, middle=[2,3], tail=4
 ```
 
 ## Collections: Dictionaries
@@ -1961,6 +1885,8 @@ let modified_tuple = tuple.replace(1, "world") // (1, "world", 3.14)
 ```ore
 let user = {"name": "John", "age": 30}  // Basic dictionary
 let empty_dict = {}                     // Empty dictionary
+let from_entries = dict([("a", 1), ("b", 2)])  // From key-value pairs
+let from_keys = dict.fromKeys(["a", "b"], 0)  // {"a": 0, "b": 0}
 let typed_dict: Dictionary<string, int> = {"a": 1, "b": 2}  // Typed dictionary
 ```
 
@@ -1969,20 +1895,21 @@ let typed_dict: Dictionary<string, int> = {"a": 1, "b": 2}  // Typed dictionary
 ```ore
 let user_name = user["name"]            // "John"
 let user_age = user.age                 // 30 (dot notation)
-```
-
-### Dictionary Slicing
-
-```ore
-let subset = user["name".."age"]        // Get entries between "name" and "age"
+let safe_get = user.get("email", "default@example.com")  // With default value
+let multi_get = user.getMultiple(["name", "age"])  // Get multiple keys at once
 ```
 
 ### Dictionary Operations
 
 ```ore
 user["email"] = "john@example.com"      // Add or update value
+user.set("phone", "555-1234")           // Alternative way to set
+user.update({"city": "New York", "country": "USA"})  // Update with multiple entries
 user.remove("age")                      // Remove key
+user.pop("email")                       // Remove and return value
+user.popItem()                          // Remove and return last key-value pair
 let has_email = user.hasKey("email")    // true
+let has_value = user.hasValue("John")   // true
 let all_keys = user.keys()              // ["name", "email"]
 let all_values = user.values()          // ["John", "john@example.com"]
 let all_entries = user.entries()        // [["name", "John"], ["email", "john@example.com"]]
@@ -1992,9 +1919,15 @@ let all_entries = user.entries()        // [["name", "John"], ["email", "john@ex
 
 ```ore
 let dict_size = user.size()             // 2
+let dict_len = user.length              // 2 (alternative)
 let is_dict_empty = user.isEmpty()      // false
 user.clear()                            // Remove all entries
 let merged = user.merge({"city": "New York"}) // Combine dictionaries
+let deep_copy = user.clone()            // Deep copy
+let flipped = user.flip()               // Swap keys and values
+let filtered = user.filter((k, v) => v is string)  // Filter dictionary
+let mapped = user.map((k, v) => v.toUpper() if v is string else v)  // Transform values
+let deep_get = user.deepGet("contact.email", null)  // Get nested property or default
 ```
 
 ## Collections: Sets
@@ -2005,19 +1938,19 @@ let merged = user.merge({"city": "New York"}) // Combine dictionaries
 let unique_numbers = {1, 2, 3, 4, 5}    // Basic set
 let empty_set = set()                   // Empty set (note: {} creates an empty dictionary)
 let converted_set = set([1, 2, 2, 3])   // {1, 2, 3}
-```
-
-### Frozen Sets (Immutable)
-
-```ore
-let immutable_set = frozenset({1, 2, 3})
+let from_string = set("hello")          // {'h', 'e', 'l', 'o'}
+let typed_set: Set<int> = {1, 2, 3}     // Typed set
 ```
 
 ### Set Operations
 
 ```ore
 unique_numbers.add(6)                   // {1, 2, 3, 4, 5, 6}
+unique_numbers.addAll([7, 8, 9])        // Add multiple elements
 unique_numbers.remove(3)                // {1, 2, 4, 5, 6}
+unique_numbers.discard(10)              // Remove if present (no error if missing)
+unique_numbers.pop()                    // Remove and return an arbitrary element
+unique_numbers.clear()                  // Remove all elements
 let has_five = unique_numbers.contains(5) // true
 ```
 
@@ -2025,7 +1958,13 @@ let has_five = unique_numbers.contains(5) // true
 
 ```ore
 let set_size = unique_numbers.size()    // 5
+let set_len = unique_numbers.length     // 5 (alternative)
 let is_set_empty = unique_numbers.isEmpty() // false
+let as_list = unique_numbers.toList()   // Convert to list
+let as_tuple = unique_numbers.toTuple() // Convert to tuple
+let as_sorted = unique_numbers.sorted() // Get sorted list of elements
+let max_value = unique_numbers.max()    // Largest element
+let min_value = unique_numbers.min()    // Smallest element
 ```
 
 ### Set Algebra
@@ -2040,4 +1979,30 @@ let symmetric_diff = set1.symmetricDifference(set2) // {1, 2, 3, 6, 7}
 let is_subset = {1, 2}.isSubset(set1)   // true
 let is_superset = set1.isSuperset({1, 2}) // true
 let is_disjoint = set1.isDisjoint({6, 7, 8}) // true
-``` 
+set1.update(set2)                       // Modify set1 in place to include set2 elements
+set1.intersectionUpdate(set2)           // Modify set1 to keep only elements in set2
+set1.differenceUpdate(set2)             // Modify set1 to remove elements found in set2
+set1.symmetricDifferenceUpdate(set2)    // Update set1 with symmetric difference
+```
+
+### Frozen Sets (Immutable)
+
+```ore
+let immutable_set = frozenset({1, 2, 3})  // Create a frozen set
+let from_list = frozenset([1, 2, 3, 1])   // Create from list, duplicates removed
+let from_set = frozenset(set1)            // Create from another set
+let empty_frozen = frozenset()            // Empty frozen set
+
+// Frozen sets have the same query methods as regular sets
+let has_item = immutable_set.contains(2)  // true
+let is_subset = immutable_set.isSubset({1, 2, 3, 4})  // true
+
+// Creating new frozen sets from operations (doesn't modify original)
+let combined = immutable_set.union({3, 4, 5})  // frozenset({1, 2, 3, 4, 5})
+let common = immutable_set.intersection({2, 3, 4})  // frozenset({2, 3})
+
+// Frozen sets can be used as dictionary keys (regular sets cannot)
+let set_keys = { 
+    immutable_set: "value1",
+    frozenset({4, 5, 6}): "value2"
+} 
