@@ -1,0 +1,1006 @@
+// Syntax specification for the Ore programming language
+
+//////////////////////////////////////////
+// 1. BASIC SYNTAX
+//////////////////////////////////////////
+
+// Single line comments
+// Can use C-style comments
+
+# Python-style comments also work
+
+/*
+Multi-line comments
+supported as well
+*/
+
+//////////////////////////////////////////
+// 2. IMPORTS
+//////////////////////////////////////////
+
+// Imports
+import math                          // Import entire module
+from math import sin, cos            // Import specific functions
+import math as m                     // Import with alias
+from math import *                   // Import all (use with caution)
+
+//////////////////////////////////////////
+// 3. VARIABLES AND CONSTANTS
+//////////////////////////////////////////
+
+// Variable declaration and assignment
+let name = "dhruv rawat"             // String
+let char = 'c'                       // Character
+let age = 30                         // Integer (type inferred)
+let active = true                    // Boolean (type inferred)
+let pi = 3.14159                     // Float (type inferred)
+
+// Explicit type annotations
+let version: float = 1.0
+let count: int = 10
+let message: string = "Hello"
+let isEnabled: bool = false
+
+// Constants (cannot be reassigned)
+const PI = 3.14159
+const MAX_USERS: int = 1000
+
+// Type inference (no need to explicitly state type)
+let inferred_int = 42                // compiler infers int type
+let inferred_str = "hello"           // compiler infers string type
+
+//////////////////////////////////////////
+// 4. PRINT AND INPUT
+//////////////////////////////////////////
+
+// Basic printing
+print("Hello, World!")               // Print with no newline
+println("Hello, World!")             // Print with newline
+
+// Print with formatted values
+print("Value: ${count}")             // String interpolation
+print(f"Value: {count}")             // f-string style interpolation
+
+// Input
+let user_input = input("Enter your name: ")
+let age_input = input("Enter your age: ")
+
+// Input with type conversion
+let age_num = int(input("Enter your age: "))
+let height = float(input("Enter your height: "))
+
+//////////////////////////////////////////
+// 5. DATA TYPES AND CONVERSION
+//////////////////////////////////////////
+
+// Basic types
+let int_val = 42                     // Integer
+let float_val = 3.14                 // Float
+let str_val = "hello"                // String
+let bool_val = true                  // Boolean
+let char_val = 'A'                   // Character
+
+// Type conversion functions (Python-style)
+let string_value = str(42)           // "42"
+let integer_value = int("42")        // 42
+let float_value = float("3.14")      // 3.14
+let boolean_value = bool("true")     // true
+let list_from_other = list((1, 2, 3)) // [1, 2, 3]
+let tuple_from_other = tuple([1, 2, 3]) // (1, 2, 3)
+let set_from_other = set([1, 2, 2, 3]) // {1, 2, 3}
+let frozen_set = frozenset({1, 2, 3}) // immutable set
+let dict_from_entries = dict([["name", "John"], ["age", 30]])
+
+// Alternative constructor syntax
+let str_val2 = String(42)            // "42"
+let int_val2 = Integer("42")         // 42
+let float_val2 = Float("3.14")       // 3.14
+let bool_val2 = Boolean(1)           // true
+let list_val = List((1, 2, 3))       // [1, 2, 3]
+let set_val = Set([1, 2, 2, 3])      // {1, 2, 3}
+
+//////////////////////////////////////////
+// 6. NULL VALUES
+//////////////////////////////////////////
+
+// Different ways to represent null values (all equivalent)
+let v1 = null                        // Primary null syntax
+let v2 = NULL                        // Alternate syntax (equivalent)
+let v3 = None                        // Python-style null (equivalent)
+let v4 = undefined                   // JavaScript-style (equivalent)
+
+// Nullable types
+let optional_email: string? = null   // nullable string
+let optional_count: int? = 10        // nullable int
+
+// Null type checking
+print(v1 == null)                    // true
+print(v1 === null)                   // true (strict equality)
+print(v1 is null)                    // true (type checking)
+
+// Null coalescing
+let username = input ?? "guest"      // Default if null
+
+// Safe navigation (optional chaining)
+let city = user?.address?.city       // null if user or address is null
+
+//////////////////////////////////////////
+// 7. STRINGS
+//////////////////////////////////////////
+
+// String creation
+let greeting = "Hello, World!"
+let single_quote = 'Single quotes work too'
+
+// String interpolation
+let message = "Hello, ${name}!"      // Variable interpolation
+
+// f-strings (Python-style)
+let f_message = f"Hello, {name}!"    // Alternative interpolation
+let f_expr = f"1 + 1 = {1 + 1}"      // With expressions
+let f_format = f"{pi:.2f}"           // With formatting: "3.14"
+
+// Raw strings (no escape sequences)
+let path = r"C:\Users\dhruv\Documents"
+
+// Multiline strings
+let multiline = """
+    This is a multiline string
+    that preserves whitespace
+    and formatting
+"""
+
+// String operations
+let upper = greeting.toUpper()       // "HELLO, WORLD!"
+let lower = greeting.toLower()       // "hello, world!"
+let trimmed = "  hello  ".trim()     // "hello"
+let parts = greeting.split(", ")     // ["Hello", "World!"]
+let joined = ["Hello", "World"].join(", ") // "Hello, World"
+
+// String indexing and slicing
+let first_char = greeting[0]         // 'H'
+let last_char = greeting[-1]         // '!'
+let substr1 = greeting[0..4]         // "Hello"
+let substr2 = greeting[7..]          // "World!"
+let substr3 = greeting[..-2]         // "Hello, World"
+let substr4 = greeting[::2]          // "Hlo ol!"    (step by 2)
+let reversed = greeting[::-1]        // "!dlroW ,olleH" (reverse)
+let part = greeting[0..10:2]         // "Hlo W"      (slice with step)
+
+//////////////////////////////////////////
+// 8. COLLECTIONS: LISTS
+//////////////////////////////////////////
+
+// List creation
+let numbers = [1, 2, 3, 4, 5]
+let mixed = [1, "two", 3.0, true]   // Heterogeneous list
+let empty_list = []
+let typed_list: int[] = [1, 2, 3]    // Typed list
+
+// List indexing and slicing
+let first = numbers[0]              // 1
+let last = numbers[-1]              // 5
+let sub_list = numbers[1..3]        // [2, 3, 4]
+let every_other = numbers[::2]      // [1, 3, 5]
+let reversed_list = numbers[::-1]   // [5, 4, 3, 2, 1]
+
+// List operations
+numbers.push(6)                     // Add to end: [1, 2, 3, 4, 5, 6]
+let popped = numbers.pop()          // Remove from end, returns 6: [1, 2, 3, 4, 5]
+numbers.insert(0, 0)                // Insert at position: [0, 1, 2, 3, 4, 5]
+numbers.remove(3)                   // Remove by value: [0, 1, 2, 4, 5]
+numbers.removeAt(2)                 // Remove by index: [0, 1, 4, 5]
+
+// List methods
+let sorted_list = numbers.sorted()  // Returns sorted copy
+numbers.sort()                      // Sorts in place
+let joined_str = numbers.join(", ") // "0, 1, 4, 5"
+let has_value = numbers.contains(4) // true
+let index = numbers.indexOf(4)      // 2
+let is_empty = numbers.isEmpty()    // false
+let size = numbers.length           // 4
+
+// Functional operations
+let doubled = numbers.map(x => x * 2)    // [0, 2, 8, 10]
+let filtered = numbers.filter(x => x > 2) // [4, 5]
+let sum_val = numbers.reduce((acc, x) => acc + x, 0) // 10
+numbers.forEach(x => print(x))      // Prints each item
+
+// Statistical methods
+let sum = numbers.sum()             // 10
+let avg = numbers.average()         // 2.5
+let min_val = numbers.min()         // 0
+let max_val = numbers.max()         // 5
+let count_val = numbers.count(x => x > 2) // 2
+
+// List comprehension
+let evens = [x for x in numbers if x % 2 == 0]
+let squares = [x*x for x in 1..10]  // Using range
+let matrix = [[i*j for i in 1..3] for j in 1..3]  // Nested comprehension
+
+//////////////////////////////////////////
+// 9. COLLECTIONS: TUPLES
+//////////////////////////////////////////
+
+// Tuple creation (immutable)
+let tuple = (1, "hello", 3.14)
+let empty_tuple = ()
+let single_item_tuple = (1,)        // Note the comma
+let nested_tuple = (1, (2, 3), 4)
+
+// Tuple indexing and slicing
+let tuple_first = tuple[0]          // 1
+let tuple_last = tuple[-1]          // 3.14
+let tuple_slice = tuple[1..]        // ("hello", 3.14)
+let tuple_reverse = tuple[::-1]     // (3.14, "hello", 1)
+
+// Tuple methods
+let tuple_length = tuple.length     // 3
+let has_hello = tuple.contains("hello") // true
+let hello_index = tuple.indexOf("hello") // 1
+
+// Creating new tuples (since tuples are immutable)
+let extended_tuple = tuple.append(42) // (1, "hello", 3.14, 42)
+let combined_tuple = tuple.concat((5, 6)) // (1, "hello", 3.14, 5, 6)
+let modified_tuple = tuple.replace(1, "world") // (1, "world", 3.14)
+
+//////////////////////////////////////////
+// 10. COLLECTIONS: DICTIONARIES
+//////////////////////////////////////////
+
+// Dictionary creation
+let user = {"name": "John", "age": 30}
+let empty_dict = {}
+let typed_dict: Dictionary<string, int> = {"a": 1, "b": 2}
+
+// Dictionary access
+let user_name = user["name"]        // "John"
+let user_age = user.age             // 30 (dot notation)
+
+// Dictionary slicing (by keys)
+let subset = user["name".."age"]    // Get entries between "name" and "age"
+
+// Dictionary operations
+user["email"] = "john@example.com"  // Add or update value
+user.remove("age")                  // Remove key
+let has_email = user.hasKey("email") // true
+let all_keys = user.keys()          // ["name", "email"]
+let all_values = user.values()      // ["John", "john@example.com"]
+let all_entries = user.entries()    // [["name", "John"], ["email", "john@example.com"]]
+
+// Dictionary methods
+let dict_size = user.size()         // 2
+let is_dict_empty = user.isEmpty()  // false
+user.clear()                        // Remove all entries
+let merged = user.merge({"city": "New York"}) // Combine dictionaries
+
+//////////////////////////////////////////
+// 11. COLLECTIONS: SETS
+//////////////////////////////////////////
+
+// Set creation (unique values)
+let unique_numbers = {1, 2, 3, 4, 5}
+let empty_set = set()               // Note: {} creates an empty dictionary
+let converted_set = set([1, 2, 2, 3]) // {1, 2, 3}
+
+// Frozen sets (immutable)
+let immutable_set = frozenset({1, 2, 3})
+
+// Set operations
+unique_numbers.add(6)               // {1, 2, 3, 4, 5, 6}
+unique_numbers.remove(3)            // {1, 2, 4, 5, 6}
+let has_five = unique_numbers.contains(5) // true
+
+// Set methods
+let set_size = unique_numbers.size() // 5
+let is_set_empty = unique_numbers.isEmpty() // false
+
+// Set algebra
+let set1 = {1, 2, 3, 4, 5}
+let set2 = {4, 5, 6, 7}
+let union_set = set1.union(set2)    // {1, 2, 3, 4, 5, 6, 7}
+let intersection_set = set1.intersection(set2) // {4, 5}
+let difference_set = set1.difference(set2) // {1, 2, 3}
+let symmetric_diff = set1.symmetricDifference(set2) // {1, 2, 3, 6, 7}
+let is_subset = {1, 2}.isSubset(set1) // true
+let is_superset = set1.isSuperset({1, 2}) // true
+let is_disjoint = set1.isDisjoint({6, 7, 8}) // true
+
+//////////////////////////////////////////
+// 12. OPERATORS
+//////////////////////////////////////////
+
+// Arithmetic operators
+let a = 10
+let b = 3
+a + b        // 13 (addition)
+a - b        // 7 (subtraction)
+a * b        // 30 (multiplication)
+a / b        // 3.33333 (division)
+a % b        // 1 (modulo/remainder)
+a // b       // 3 (integer division)
+a ** b       // 1000 (exponentiation)
+
+// Increment/decrement
+a++          // Increment by 1
+b--          // Decrement by 1
+
+// Comparison operators
+a == b       // false (equal to)
+a != b       // true (not equal to)
+a > b        // true (greater than)
+a < b        // false (less than)
+a >= b       // true (greater than or equal to)
+a <= b       // false (less than or equal to)
+a === b      // false (strict equality)
+a !== b      // true (strict inequality)
+
+// Logical operators
+true && false    // false (logical AND)
+true || false    // true (logical OR)
+!true            // false (logical NOT)
+
+// Identity operators
+let x = [1, 2, 3]
+let y = x
+let z = [1, 2, 3]
+x is y       // true (same object)
+x is not z   // true (different objects)
+
+// Membership operators
+3 in x               // true
+6 not in x           // true
+"name" in user       // true (key in dictionary)
+
+// Type checking operators
+value is int         // true (value is of type int)
+value is not string  // true (value is not of type string)
+
+// Bitwise operators
+a & b        // 2 (bitwise AND)
+a | b        // 11 (bitwise OR)
+a ^ b        // 9 (bitwise XOR)
+~a           // -11 (bitwise NOT)
+a << 1       // 20 (left shift by 1)
+a >> 1       // 5 (right shift by 1)
+
+// Assignment operators
+let var = 10         // Simple assignment
+var += 5             // 15 (add and assign)
+var -= 3             // 12 (subtract and assign)
+var *= 2             // 24 (multiply and assign)
+var /= 4             // 6 (divide and assign)
+var %= 4             // 2 (modulo and assign)
+var **= 2            // 4 (exponentiate and assign)
+
+// Special operators
+// Ternary operator
+let status = age >= 18 ? "adult" : "minor"
+
+// Null coalescing
+let display_name = user_name ?? "Anonymous"
+
+// Pipeline operator
+let result = data |> filter(x => x > 0) |> map(x => x * 2) |> sum()
+
+// Spread operator
+let combined = [...arr1, ...arr2]
+
+// Range operators
+1..10        // Inclusive range: 1, 2, 3, ..., 10
+1..<10       // Exclusive range: 1, 2, 3, ..., 9
+
+//////////////////////////////////////////
+// 13. CONTROL FLOW: CONDITIONS
+//////////////////////////////////////////
+
+// If statement
+if (x > 10) {
+    print("x is greater than 10")
+} elif (x < 5) {
+    print("x is less than 5")
+} else {
+    print("x is between 5 and 10")
+}
+
+// Ternary conditional
+let status = age >= 18 ? "adult" : "minor"
+
+// Switch statement
+switch (day) {
+    case "Monday":
+        startWorkWeek()
+        break
+    case "Saturday":
+    case "Sunday":
+        weekend()
+        break
+    default:
+        regularDay()
+}
+
+// Pattern matching
+match (count) {
+    0 => print("zero"),
+    1 | 2 => print("one or two"),
+    x if x > 2 => print("many (${x})"),
+    _ => print("default")
+}
+
+//////////////////////////////////////////
+// 14. CONTROL FLOW: LOOPS
+//////////////////////////////////////////
+
+// While loop
+while (condition) {
+    // Code to execute while condition is true
+    if (errorCondition) break       // Exit loop
+    if (skipCondition) continue     // Skip to next iteration
+}
+
+// Do-while loop
+do {
+    print("i = ${i}")
+    i++
+} while (i < 5)
+
+// C-style for loop
+for (let i = 0; i < 10; i++) {
+    print(i)
+}
+
+// For-in loops for collections
+for (item in collection) {
+    print(item)
+}
+
+// For-in with index
+for (item, idx in collection) {
+    print("${idx}: ${item}")
+}
+
+// Python-style range-based loop
+for (i in range(1, 10)) {          // 1, 2, ..., 9
+    print(i)
+}
+
+for (i in range(1, 10, 2)) {       // 1, 3, 5, 7, 9 (with step)
+    print(i)
+}
+
+//////////////////////////////////////////
+// 15. RANGES
+//////////////////////////////////////////
+
+// Inclusive range: 1, 2, 3, ..., 10
+for (i in 1..10) {
+    print(i)
+}
+
+// Exclusive range: 1, 2, 3, ..., 9
+for (i in 1..<10) {
+    print(i)
+}
+
+// Alternative exclusive range: 1, 2, 3, ..., 9
+for (i in 1 until 10) {
+    print(i)
+}
+
+// Range with step: 1, 3, 5, 7, 9
+for (i in 1..10 step 2) {
+    print(i)
+}
+
+// Descending range: 10, 9, 8, ..., 1
+for (i in 10..1 step -1) {
+    print(i)
+}
+
+// Combining range features: 5, 10, 15, 20, 25
+for (i in 5 until 30 step 5) {
+    print(i)
+}
+
+// Using range() function (Python-style)
+for (i in range(10)) {              // 0, 1, 2, ..., 9
+    print(i)
+}
+
+//////////////////////////////////////////
+// 16. FUNCTIONS
+//////////////////////////////////////////
+
+// Basic function
+fn add(a, b) {
+    return a + b
+}
+
+// Function with type annotations
+fn subtract(a: int, b: int): int {
+    return a - b
+}
+
+// Function call
+let result = add(5, 10)
+
+// Arrow/lambda functions
+let square = (x) => x * x
+let mult = (a, b) => { return a * b }
+
+// Default parameters
+fn greet(name: string, greeting: string = "Hello") {
+    print("${greeting}, ${name}!")
+}
+
+// Named parameters
+fn createUser(name: string, age: int, email: string?) {
+    // Function body
+}
+
+// Call with named parameters
+createUser(
+    name: "Dhruv",
+    email: "dhruv@example.com",
+    age: 25
+)
+
+// Required parameters (Dart-style)
+fn registerUser({required name, required email, age = 18, bio = ""}) {
+    print("Registering ${name} (${email}), Age: ${age}")
+    if (bio != "") {
+        print("Bio: ${bio}")
+    }
+}
+
+// Rest parameters / spread syntax
+fn sum(...numbers) {
+    let total = 0
+    for (n in numbers) {
+        total += n
+    }
+    return total
+}
+
+// Args and kwargs (Python-style)
+fn process(required, *args, **kwargs) {
+    print("Required: ${required}")
+    
+    // Access positional arguments
+    for (arg, i in args) {
+        print("args[${i}]: ${arg}")
+    }
+    
+    // Access keyword arguments
+    for (key, value in kwargs) {
+        print("${key}: ${value}")
+    }
+}
+
+// Function overloading
+fn add(a: int, b: int): int {
+    return a + b
+}
+
+fn add(a: string, b: string): string {
+    return a + b
+}
+
+// Generic functions
+fn identity<T>(value: T): T {
+    return value
+}
+
+// Decorators
+@deprecated("Use newFunction instead")
+fn oldFunction() {
+    // Function body
+}
+
+@memoize  // Caches function results
+fn fibonacci(n: int): int {
+    if (n <= 1) return n
+    return fibonacci(n-1) + fibonacci(n-2)
+}
+
+//////////////////////////////////////////
+// 17. DESTRUCTURING
+//////////////////////////////////////////
+
+// Tuple destructuring
+let (x, y, z) = (1, 2, 3)
+
+// List destructuring
+let [first, second, ...rest] = [1, 2, 3, 4, 5]
+
+// Object destructuring
+let { name: n, age: a } = user
+
+// Destructuring in function parameters
+fn processUser({ name, age }) {
+    print("Name: ${name}, Age: ${age}")
+}
+
+//////////////////////////////////////////
+// 18. SPREAD SYNTAX
+//////////////////////////////////////////
+
+let arr1 = [1, 2, 3]
+let arr2 = [4, 5, 6]
+let combined = [...arr1, ...arr2]  // [1, 2, 3, 4, 5, 6]
+
+let defaults = {"theme": "dark", "fontSize": 12}
+let custom = {"fontSize": 14}
+let settings = {...defaults, ...custom}  // Custom overrides defaults
+
+//////////////////////////////////////////
+// 19. ASYNC / AWAIT
+//////////////////////////////////////////
+
+async fn fetchData(url: string): string {
+    let resp = await http.get(url)
+    return resp.body
+}
+
+// Async with try/catch
+async fn main() {
+    try {
+        let data = await fetchData("https://api.example.com/data")
+        processData(data)
+    } catch (err) {
+        handleError(err)
+    }
+}
+
+// Promise-like API
+fetchData("https://api.example.com/data")
+    .then(data => processData(data))
+    .catch(err => handleError(err))
+
+//////////////////////////////////////////
+// 20. STRUCTS AND CLASSES
+//////////////////////////////////////////
+
+// Using 'struct' keyword
+struct Point {
+    x: int
+    y: int
+    
+    // Constructor using 'constructor' keyword
+    constructor(x: int, y: int) {
+        this.x = x
+        this.y = y
+    }
+    
+    // Alternative init method (also works)
+    init(x: int, y: int) {
+        this.x = x
+        this.y = y
+    }
+    
+    // Method
+    fn distanceFromOrigin(): float {
+        return sqrt(x*x + y*y)
+    }
+}
+
+// Constructor call
+let point1 = Point(5, 10)           // Using default constructor
+let point2 = constructor Point(3, 4) // Explicit constructor call
+
+struct User {
+    name: string
+    age: int
+    email: string?
+    
+    // Constructor with default parameter
+    constructor(name: string, age: int, email: string? = null) {
+        this.name = name
+        this.age = age
+        this.email = email
+    }
+    
+    // Methods
+    fn isAdult(): bool {
+        return age >= 18
+    }
+    
+    fn toString(): string {
+        return "User(${name}, ${age})"
+    }
+}
+
+//////////////////////////////////////////
+// 21. OPERATOR OVERLOADING
+//////////////////////////////////////////
+
+fn operator +(a: Point, b: Point): Point {
+    return Point(a.x + b.x, a.y + b.y)
+}
+
+fn operator -(a: Point, b: Point): Point {
+    return Point(a.x - b.x, a.y - b.y)
+}
+
+fn operator *(a: Point, scalar: int): Point {
+    return Point(a.x * scalar, a.y * scalar)
+}
+
+//////////////////////////////////////////
+// 22. ENUMS AND UNIONS
+//////////////////////////////////////////
+
+// Basic enum
+enum Color { RED, GREEN, BLUE }
+
+// Enum with values
+enum HttpStatus {
+    OK = 200,
+    NOT_FOUND = 404,
+    SERVER_ERROR = 500
+}
+
+// Union type
+union IntOrString {
+    int_val: int
+    str_val: string
+}
+
+// Type alias for union
+type ID = int | string
+
+//////////////////////////////////////////
+// 23. ERROR HANDLING
+//////////////////////////////////////////
+
+try {
+    riskyOperation()
+} catch (err) {
+    print("Error: ${err}")
+} finally {
+    print("Done")
+}
+
+// Result type for functional error handling
+enum Result<T, E> {
+    Ok(T),
+    Err(E)
+}
+
+fn divide(a: int, b: int): Result<int, string> {
+    if (b == 0) {
+        return Result.Err("Division by zero")
+    }
+    return Result.Ok(a / b)
+}
+
+// Using result with pattern matching
+match (divide(10, 2)) {
+    Result.Ok(value) => print("Result: ${value}"),
+    Result.Err(error) => print("Error: ${error}")
+}
+
+// Try operator for simplified error handling
+fn compute(): Result<int, string> {
+    let a = try! divide(10, 2)      // Unwraps Ok or returns Err
+    let b = try! divide(a, 1)
+    return Result.Ok(b)
+}
+
+//////////////////////////////////////////
+// 24. MODULES
+//////////////////////////////////////////
+
+module math_utils {
+    fn square(x: int): int {
+        return x * x
+    }
+    
+    fn cube(x: int): int {
+        return x * x * x
+    }
+    
+    // Private to module
+    private fn helper() {
+        // Implementation
+    }
+}
+
+// Import and use
+import math_utils
+let squared = math_utils.square(5)
+
+//////////////////////////////////////////
+// 25. TYPE INSPECTION
+//////////////////////////////////////////
+
+let type_name = typeof(count)         // Returns "int" as string
+let type_object = type(count)         // Returns the actual type object
+let is_int = count is int             // Type checking, returns true
+let is_num = count is number          // Type category checking
+
+// Check if two types are the same
+let same_type = type(count) == type(10) // true
+
+// Reflection with type() function
+let str_type = type(string)         // Get the type object for string
+let methods = type_obj.methods()    // Get list of methods for a type
+let properties = type_obj.properties() // Get list of properties
+let is_numeric = type_obj.isNumeric()  // Check if type is numeric
+let base_type = type_obj.baseType()    // Get parent type if any
+let implements = type_obj.implements(Comparable) // Check interface implementation
+
+//////////////////////////////////////////
+// 26. PIPE OPERATOR
+//////////////////////////////////////////
+
+// Chain operations left to right
+let result = data
+    |> filter(x => x > 0)
+    |> map(x => x * 2)
+    |> sum()
+
+// Equivalent to: sum(map(filter(data, x => x > 0), x => x * 2))
+
+//////////////////////////////////////////
+// 27. FILE I/O
+//////////////////////////////////////////
+
+// File reading
+let content = File.read("path/to/file.txt")         // Read entire file
+let lines = File.readLines("path/to/file.txt")      // Read as list of lines
+let bytes = File.readBytes("path/to/file.txt")      // Read as bytes
+
+// File writing
+File.write("path/to/file.txt", "Hello, world!")     // Write to file (overwrite)
+File.append("path/to/file.txt", "\nNew line")       // Append to file
+File.writeLines("path/to/file.txt", ["line1", "line2"]) // Write list of lines
+
+// File operations with open/close
+let file = File.open("path/to/file.txt", "r")       // Open for reading
+let text = file.readAll()                           // Read entire file
+file.close()                                        // Close file
+
+// Using with statement (auto-closes file)
+with (let file = File.open("path/to/file.txt", "w")) {
+    file.write("Line 1\n")
+    file.write("Line 2\n")
+}  // File is automatically closed
+
+// File modes
+// "r" - read (default)
+// "w" - write (truncate file first)
+// "a" - append
+// "r+" - read & write
+// "w+" - read & write (truncate file first)
+// "a+" - read & append
+
+// Binary mode (add "b" suffix)
+let binFile = File.open("data.bin", "rb")           // Binary read
+let imageData = binFile.readBytes()
+binFile.close()
+
+// File information
+let fileInfo = File.getInfo("path/to/file.txt")
+let size = fileInfo.size                            // File size in bytes
+let modTime = fileInfo.modificationTime             // Last modification time
+let exists = File.exists("path/to/file.txt")        // Check if file exists
+
+// Directory operations
+let files = Directory.list("path/to/dir")           // List files in directory
+Directory.create("path/to/new/dir")                 // Create directory
+Directory.remove("path/to/dir")                     // Remove directory
+let currentDir = Directory.current()                // Get current directory
+Directory.change("path/to/dir")                     // Change directory
+
+// Path operations
+let path = Path.join("dir", "subdir", "file.txt")   // Create path
+let ext = Path.extension("file.txt")                // Get extension: "txt"
+let base = Path.basename("path/to/file.txt")        // Get filename: "file.txt"
+let dir = Path.dirname("path/to/file.txt")          // Get directory: "path/to"
+
+// Equivalent to: sum(map(filter(data, x => x > 0), x => x * 2))
+
+//////////////////////////////////////////
+// 28. DATA VISUALIZATION
+//////////////////////////////////////////
+
+// Inspecting variables
+inspect(myVariable)                              // Print detailed information about a variable
+dump(complexObject)                              // Recursively dump object contents
+
+// Pretty printing
+print(JSON.stringify(data, null, 2))             // Formatted JSON output
+print(JSON.pretty(data))                         // Shorthand for formatted JSON
+Table.print(userList)                            // Display data as ASCII table
+
+// Debugging
+debug(expression)                                // Print expression with its value
+assert(condition, "Error message")               // Throw error if condition is false
+time(() => { expensiveOperation() })             // Measure execution time
+
+// Terminal colors and formatting
+print(Terminal.red("Error message"))             // Red text
+print(Terminal.green("Success message"))         // Green text
+print(Terminal.bold("Important text"))           // Bold text
+print(Terminal.underline("Emphasized text"))     // Underlined text
+
+// Terminal UI
+let progress = Terminal.progressBar(total)       // Create progress bar
+progress.update(current)                         // Update progress
+
+// Creating simple charts
+Chart.bar(["A", "B", "C"], [10, 25, 15])         // Bar chart
+Chart.line([1, 2, 3, 4], [10, 25, 15, 30])       // Line chart
+Chart.pie(["Red", "Blue", "Green"], [30, 50, 20]) // Pie chart
+
+//////////////////////////////////////////
+// 29. CONCURRENCY
+//////////////////////////////////////////
+
+// Futures/Promises
+let future = Future.create()                         // Create a future
+future.resolve(value)                               // Resolve with value
+future.reject(error)                                // Reject with error
+
+// Async/await with futures
+let result = await future                           // Wait for resolution
+try {
+    let value = await potentiallyFailingFuture()
+} catch (err) {
+    handleError(err)
+}
+
+// Parallel execution
+let results = await Future.all([future1, future2])  // Wait for all futures
+let firstResult = await Future.race([f1, f2])       // Wait for first completion
+
+// Worker threads
+let worker = Worker.spawn("worker_script.ore")      // Start worker
+worker.postMessage(data)                            // Send data to worker
+worker.onMessage(message => {                       // Receive data from worker
+    processMessage(message)
+})
+
+// Thread pools
+let pool = ThreadPool.create(4)                     // Create pool with 4 threads
+pool.submit(() => {                                 // Submit task to pool
+    computeIntensive()
+})
+pool.shutdown()                                     // Shutdown pool
+
+// Channels (CSP-style)
+let channel = Channel.create()                      // Create a channel
+channel.send(value)                                 // Send value (blocks if full)
+let received = channel.receive()                    // Receive value (blocks if empty)
+channel.close()                                     // Close channel
+
+// Non-blocking channel operations
+let success = channel.trySend(value)                // Try send (non-blocking)
+let result = channel.tryReceive()                   // Try receive (non-blocking)
+
+// Select statement (like Go's select)
+select {
+    case value = channel1.receive():                // Case for receiving
+        process(value)
+    case channel2.send(data):                       // Case for sending
+        confirmation()
+    case timeout(1000):                             // Timeout case
+        handleTimeout()
+    default:                                        // Default case
+        handleDefault()
+}
+
+// Locks and synchronization
+let mutex = Mutex.create()                          // Create mutex
+mutex.lock()                                        // Acquire lock
+try {
+    // Critical section
+} finally {
+    mutex.unlock()                                  // Release lock
+}
+
+// Simplified mutex usage
+withLock(mutex, () => {                             // Automatic lock/unlock
+    // Critical section
+})
