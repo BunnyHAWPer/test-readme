@@ -2,6 +2,70 @@
 
 Ore is a modern, developer-friendly programming language combining the best features from multiple programming paradigms. It's designed to be expressive, powerful, and easy to learn.
 
+> **Note on Code Examples:** All code examples in this documentation use the `ore` syntax highlighting tag. For optimal viewing experience, use a Markdown viewer or editor that supports syntax highlighting like GitHub, VS Code, or any modern IDE.
+>
+> **Custom Syntax Highlighting:** To customize the colors, you can use the following CSS in your markdown renderer or website:
+>
+> ```css
+> /* Dracula Theme (Dark) */
+> .language-ore .keyword { color: #ff79c6; }             /* Keywords like let, fn, if */
+> .language-ore .string { color: #f1fa8c; }              /* String literals */
+> .language-ore .number { color: #bd93f9; }              /* Numeric literals */
+> .language-ore .comment { color: #6272a4; }             /* Comments */
+> .language-ore .function { color: #50fa7b; }            /* Function names */
+> .language-ore .variable { color: #f8f8f2; }            /* Variables */
+> .language-ore .operator { color: #ff79c6; }            /* Operators +, -, *, / */
+> .language-ore .type { color: #8be9fd; }                /* Type names like int, string */
+> .language-ore .class-name { color: #8be9fd; }          /* Class and struct names */
+> .language-ore .builtin { color: #ffb86c; }             /* Built-in functions */
+>
+> /* OR */
+>
+> /* Nord Theme (Dark) */
+> .nord .language-ore .keyword { color: #81A1C1; }       /* Keywords */
+> .nord .language-ore .string { color: #A3BE8C; }        /* Strings */
+> .nord .language-ore .number { color: #B48EAD; }        /* Numbers */
+> .nord .language-ore .comment { color: #616E88; }       /* Comments */
+> .nord .language-ore .function { color: #88C0D0; }      /* Functions */
+> .nord .language-ore .variable { color: #D8DEE9; }      /* Variables */
+> .nord .language-ore .operator { color: #81A1C1; }      /* Operators */
+> .nord .language-ore .type { color: #8FBCBB; }          /* Types */
+> .nord .language-ore .class-name { color: #8FBCBB; }    /* Classes */
+> .nord .language-ore .builtin { color: #EBCB8B; }       /* Built-ins */
+>
+> /* OR */
+>
+> /* Monokai Theme (Dark) */
+> .monokai .language-ore .keyword { color: #F92672; }    /* Keywords */
+> .monokai .language-ore .string { color: #E6DB74; }     /* Strings */
+> .monokai .language-ore .number { color: #AE81FF; }     /* Numbers */
+> .monokai .language-ore .comment { color: #75715E; }    /* Comments */
+> .monokai .language-ore .function { color: #A6E22E; }   /* Functions */
+> .monokai .language-ore .variable { color: #F8F8F2; }   /* Variables */
+> .monokai .language-ore .operator { color: #F92672; }   /* Operators */
+> .monokai .language-ore .type { color: #66D9EF; }       /* Types */
+> .monokai .language-ore .class-name { color: #66D9EF; } /* Classes */
+> .monokai .language-ore .builtin { color: #FD971F; }    /* Built-ins */
+>
+> /* OR */
+>
+> /* GitHub Theme (Light) */
+> .github-light .language-ore .keyword { color: #D73A49; }     /* Keywords */
+> .github-light .language-ore .string { color: #032F62; }      /* Strings */
+> .github-light .language-ore .number { color: #005CC5; }      /* Numbers */
+> .github-light .language-ore .comment { color: #6A737D; }     /* Comments */
+> .github-light .language-ore .function { color: #6F42C1; }    /* Functions */
+> .github-light .language-ore .variable { color: #24292E; }    /* Variables */
+> .github-light .language-ore .operator { color: #D73A49; }    /* Operators */
+> .github-light .language-ore .type { color: #005CC5; }        /* Types */
+> .github-light .language-ore .class-name { color: #6F42C1; }  /* Classes */
+> .github-light .language-ore .builtin { color: #E36209; }     /* Built-ins */
+> ```
+>
+> The default Dracula theme provides excellent readability and visual distinction between different syntax elements, or you can choose from the Nord, Monokai, or GitHub light alternatives.
+>
+> **To use these themes:** Add the CSS to your website's stylesheet, then add the appropriate class to your HTML container (e.g., `<div class="monokai">` or `<div class="github-light">`).
+
 ```ore
 // A colorful example of the Ore programming language
 import math
@@ -1987,57 +2051,3 @@ let all_keys = user.keys()              // ["name", "email"]
 let all_values = user.values()          // ["John", "john@example.com"]
 let all_entries = user.entries()        // [["name", "John"], ["email", "john@example.com"]]
 ```
-
-### Dictionary Methods
-
-```ore
-let dict_size = user.size()             // 2
-let is_dict_empty = user.isEmpty()      // false
-user.clear()                            // Remove all entries
-let merged = user.merge({"city": "New York"}) // Combine dictionaries
-```
-
-## Collections: Sets
-
-### Set Creation
-
-```ore
-let unique_numbers = {1, 2, 3, 4, 5}    // Basic set
-let empty_set = set()                   // Empty set (note: {} creates an empty dictionary)
-let converted_set = set([1, 2, 2, 3])   // {1, 2, 3}
-```
-
-### Frozen Sets (Immutable)
-
-```ore
-let immutable_set = frozenset({1, 2, 3})
-```
-
-### Set Operations
-
-```ore
-unique_numbers.add(6)                   // {1, 2, 3, 4, 5, 6}
-unique_numbers.remove(3)                // {1, 2, 4, 5, 6}
-let has_five = unique_numbers.contains(5) // true
-```
-
-### Set Methods
-
-```ore
-let set_size = unique_numbers.size()    // 5
-let is_set_empty = unique_numbers.isEmpty() // false
-```
-
-### Set Algebra
-
-```ore
-let set1 = {1, 2, 3, 4, 5}
-let set2 = {4, 5, 6, 7}
-let union_set = set1.union(set2)        // {1, 2, 3, 4, 5, 6, 7}
-let intersection_set = set1.intersection(set2) // {4, 5}
-let difference_set = set1.difference(set2) // {1, 2, 3}
-let symmetric_diff = set1.symmetricDifference(set2) // {1, 2, 3, 6, 7}
-let is_subset = {1, 2}.isSubset(set1)   // true
-let is_superset = set1.isSuperset({1, 2}) // true
-let is_disjoint = set1.isDisjoint({6, 7, 8}) // true
-``` 
